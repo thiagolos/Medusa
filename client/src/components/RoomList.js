@@ -1,12 +1,23 @@
 import { useContext } from "react";
 import { ChatContext } from "../context/ChatContext";
 import { MessageContext } from "../context/MessageContext";
-import ChatList from "./ChatList";
-import Chat from './Messaging'
+
 
 function RoomList() {
-  const { chatrooms } = useContext(ChatContext);
+  const { chatrooms, setSelectorClosed,setSelectorVisible } = useContext(ChatContext);
   const { handleRoomButtonClick } = useContext(MessageContext);
+
+
+  const handleButtonClick = (roomName) => {
+    handleRoomButtonClick(roomName); // Call the existing function
+    secondFunction(roomName); // Call the second function
+  };
+
+  const secondFunction = () => {
+    setSelectorVisible(false);
+    setSelectorClosed(true);
+  };
+
 
   return (
     <>
@@ -19,12 +30,9 @@ function RoomList() {
               return (
                 <button className="RoomButton"
                   key={chatroom._id}
-                  onClick={() => handleRoomButtonClick(roomName)}
+                  onClick={() => handleButtonClick(roomName)}
                 >
-                  {/* name:  */}
                   {chatroom.name}
-                  {/* users:
-                  {chatroom.users} */}
                 </button>
               );
             })}
@@ -32,10 +40,6 @@ function RoomList() {
         </div>
 
       </div>
-
-      {/* <div className="Logo">
-            <h2>MEDUSA</h2>
-      </div> */}
 
     </>
   );

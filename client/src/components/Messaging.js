@@ -54,7 +54,8 @@ function Chat({room, socket}) {
     return color;
   }
 
- 
+   // POSITIONING 
+
   function calculateLeft() {
     const value = `${Math.floor(Math.random() * (window.innerWidth - 300))}px`;
     console.log('VALEU', value)
@@ -65,11 +66,14 @@ function Chat({room, socket}) {
     return `${Math.floor(Math.random() * (window.innerHeight - 300))}px`;
   }
 
-  const [position, setPosition] = useState({ top: "50px", left: "50px" });
+  const [position, setPosition] = useState({ top: "-1000px", left: "-1000px" });
 
   useEffect(() => {
     setPosition({ top: calculateTop(), left: calculateLeft() });
   }, []);
+
+  // MOUSE 
+
 
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -96,13 +100,15 @@ function Chat({room, socket}) {
   }
   const chatWindowRef = useRef(null);
 
+  const messagesEndRef = useRef(null)
 
-  useEffect(() => {
-    console.log('use Effect called')
-    chatWindowRef.current?.scrollTo(0, chatWindowRef.current.scrollHeight);
-  }, [messageList]);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({behavior: 'smooth'})
+  }
 
-
+  useEffect(()=>{
+    scrollToBottom()
+  }, [messageList])
 
 
   return (
@@ -130,7 +136,7 @@ function Chat({room, socket}) {
 
             <div className="MessageContent" >{messageContent.message}
             </div>
-
+            <div ref={messagesEndRef}></div>
           </div>
           ))}
 

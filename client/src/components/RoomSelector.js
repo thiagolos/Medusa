@@ -4,13 +4,13 @@ import ChatList from "./ChatList"
 
 function RoomSelector() {
 
-  const {setRoom, joinRoom} = useContext(ChatContext) 
+  const {setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible} = useContext(ChatContext) 
 
-  const [isSelectorVisible, setSelectorVisible] = useState(true)
-  const [isSelectorClosed, setSelectorClosed] = useState(false)
+  // const [isSelectorVisible, setSelectorVisible] = useState(true)
+  // const [isSelectorClosed, setSelectorClosed] = useState(false)
 
   const handleJoinRoom = () => {
-      setSelectorVisible(false);
+    setSelectorVisible(false);
     setSelectorClosed(true)
     joinRoom();
  ;
@@ -31,16 +31,16 @@ function RoomSelector() {
 
               <input className="SelectorInput" type="text" placeholder="e.g. Berlin Dating, Greek Philosophy, ..." onChange={(event)=>{
                 setRoom(event.target.value);
-              }}></input>
+              }}>
+              </input>
               <button className="JoinButton" onClick={handleJoinRoom} >Join</button>
-
             </div>
-          
+            <div>Otherwise, feel free to inspire yourself among friends.</div>
         </div>
       )}
       {isSelectorClosed && (
-        <div className="RoomSelector">
-        <button className="JoinButton" onClick={handleToggleSelector}>+</button>
+        <div className="PlusButton">
+          <button onClick={handleToggleSelector}>+</button>
         </div>
       )}
       <ChatList></ChatList>

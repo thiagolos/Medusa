@@ -6,7 +6,7 @@ const MessageContext = createContext();
 
 function MessageProvider ({ children }) {
 
-  const {socket, setRoom, roomLists, setRoomLists, room} = useContext(ChatContext)
+  const {socket, setRoom, roomLists, setRoomLists, setSelectorClosed, setSelectorVisible} = useContext(ChatContext)
 
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([])
@@ -72,11 +72,11 @@ function MessageProvider ({ children }) {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-        console.log('message received', data)
-        const messageData = {
-          ...data,
-          sender: data.user === socket.id ? "me" : "other"
-        }
+      console.log('message received', data)
+      const messageData = {
+        ...data,
+        sender: data.user === socket.id ? "me" : "other"
+      }
       setMessageList((list) => [...list, messageData]);
       console.log('messageList', messageList)
     });

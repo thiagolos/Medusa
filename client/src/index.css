@@ -107,6 +107,19 @@ input[type="text"] {
   outline: none;
 }
 
+.PlusButton button {
+  background: none;
+  background-color: rgba(255, 255, 255, 0.09);
+  padding: 5px 9px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  text-align: center;
+  position: absolute;
+  bottom: 20px;
+  left: 20px
+}
+
 /* CHAT WINDOW */
 
 .LeaveButton {
@@ -132,7 +145,7 @@ input[type="text"] {
   align-items: center;
   font-size: medium;
   font-weight: medium;
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(255, 255, 255, 0.04);
   padding: 5px;
 
 }
@@ -140,14 +153,16 @@ input[type="text"] {
 .MessageContainer {
   border-radius: 6px;
   overflow: hidden;
+  backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .ChatWindow {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: rgba(255, 255, 255, 0.05);
   max-height: 300px;
+  max-width: 235px;
   overflow-y: scroll;
   border: none;
   padding: 10px;
