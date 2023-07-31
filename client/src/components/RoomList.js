@@ -10,27 +10,37 @@ function RoomList() {
 
   return (
     <>
-      <div>
-        <h2>List of Chatrooms:</h2>
-        <ul>
-          {chatrooms.map((chatroom) => {
-            const roomName = chatroom.name; // Store the chatroom name in a separate variable
-            return (
-              <button
-                key={chatroom._id}
-                onClick={() => handleRoomButtonClick(roomName)}
-              >
-                name: 
-                {chatroom.name},
-                users:
-                {chatroom.users}
-              </button>
-            );
-          })}
-        </ul>
+      <div className="AllRoomLists">
+
+        <div className="RoomListTop">
+          <div>
+            {chatrooms.map((chatroom) => {
+              const roomName = chatroom.name; // Store the chatroom name in a separate variable
+              return (
+                <button className="RoomButton"
+                  key={chatroom._id}
+                  onClick={() => handleRoomButtonClick(roomName)}
+                >
+                  {/* name:  */}
+                  {chatroom.name}
+                  {/* users:
+                  {chatroom.users} */}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
+
+      {/* <div className="Logo">
+            <h2>MEDUSA</h2>
+      </div> */}
+
     </>
   );
 }
 
 export default RoomList;
+
+

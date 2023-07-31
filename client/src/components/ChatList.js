@@ -9,23 +9,20 @@ function ChatList() {
   const index = roomLists.findIndex((list) => list.socketId === socket.id);
 
   if (index === -1) {
-    return <p>You haven't joined any rooms yet.</p>;
+    return 
   }
 
   return (
     <>
-      <div className="ChatList">
-      <h1>ChatList</h1>
-      <ul>
-        {roomLists[index].rooms.map((room) => (
-          <li key={room.name}>
-            {room.name} - {room.time}
-            <Chat room={room.name} socket={socket} ></Chat>
-          </li>
-        ))}
-      </ul>
-      <div>
-      </div>
+        <div className="ChatList">
+          <div>
+            {roomLists[index].rooms.map((room) => (
+              <div key={room.name}>
+                {room.name} - {room.time}
+                <Chat room={room.name} socket={socket} ></Chat>
+              </div>
+            ))}
+          </div>
       </div>
     </>
   );

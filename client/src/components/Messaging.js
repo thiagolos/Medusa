@@ -20,7 +20,6 @@ function Chat({room, socket}) {
   const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
 
   useEffect(() => {
-    // Set the color for the current user based on their socket ID
     setColorMap((prevColorMap) => {
       return {
         ...prevColorMap,
@@ -29,7 +28,6 @@ function Chat({room, socket}) {
     });
   }, [socket.id, color]);
 
-  // Get the color for the sender based on their socket ID
   function getColor(sender) {
     if (!colorMap[sender]) {
       // Generate a random color for new users
@@ -43,7 +41,6 @@ function Chat({room, socket}) {
     return colorMap[sender];
   }
 
-  // Generate a random color
   function getRandomColor() {
     const letters = "0123456789ABCDEF";
     let color = "#";
@@ -54,13 +51,13 @@ function Chat({room, socket}) {
   }
 
   
+  
 
   return (
     <>
-      <h1>Chat</h1>
       <div>
         <div className="ChatWindow">
-          <button onClick={handleLeaveRoom}>Leave Room</button>
+          <button class="JoinButton" onClick={handleLeaveRoom}>Leave Room</button>
           {messageList
           .filter((messageContent) => messageContent.room === room)
            .map((messageContent) => (
@@ -72,13 +69,13 @@ function Chat({room, socket}) {
             </div>
           ))}
           <div className="ChatInput">
-            <input 
+            <input className="SelectorInput"
               placeholder="Message"
               onChange={(event) => {
                 setMessage(event.target.value);
               }}
             ></input>
-            <button onClick={handleSendMessage}>Send Message</button>
+            <button class="JoinButton" onClick={handleSendMessage}>Send Message</button>
           </div>
         </div>
       </div>
