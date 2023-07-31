@@ -1,11 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
 function Chat({room, socket}) {
 
   const {setMessage, messageList, sendMessage} = useContext(MessageContext) 
-  const {leaveRoom, chatrooms} = useContext(ChatContext) 
+  const {leaveRoom} = useContext(ChatContext) 
+
+  // MESSAGE FUNCTIONALITY 
 
   const handleSendMessage = () => {
     sendMessage(room);
@@ -15,6 +17,8 @@ function Chat({room, socket}) {
     console.log('THE LEFT ROOM', room)
     leaveRoom(room);
   };
+
+  // COLORS 
 
   const [colorMap, setColorMap] = useState({});
   const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
@@ -50,34 +54,98 @@ function Chat({room, socket}) {
     return color;
   }
 
-  
-  
+ 
+  function calculateLeft() {
+    const value = `${Math.floor(Math.random() * (window.innerWidth - 300))}px`;
+    console.log('VALEU', value)
+    return value;
+  }
+
+  function calculateTop() {
+    return `${Math.floor(Math.random() * (window.innerHeight - 300))}px`;
+  }
+
+  const [position, setPosition] = useState({ top: "50px", left: "50px" });
+
+  useEffect(() => {
+    setPosition({ top: calculateTop(), left: calculateLeft() });
+  }, []);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  function handleMouseDown(event) {
+    setIsDragging(true);
+    setDragOffset({
+      x: event.clientX - parseInt(position.left),
+      y: event.clientY - parseInt(position.top),
+    });
+  }
+
+  function handleMouseMove(event) {
+    if (isDragging) {
+      setPosition({
+        left: event.clientX - dragOffset.x + "px",
+        top: event.clientY - dragOffset.y + "px",
+      });
+    }
+  }
+
+  function handleMouseUp() {
+    setIsDragging(false);
+  }
+  const chatWindowRef = useRef(null);
+
+
+  useEffect(() => {
+    console.log('use Effect called')
+    chatWindowRef.current?.scrollTo(0, chatWindowRef.current.scrollHeight);
+  }, [messageList]);
+
+
+
 
   return (
     <>
-      <div>
-        <div className="ChatWindow">
-          <button class="JoinButton" onClick={handleLeaveRoom}>Leave Room</button>
+      <div className="MessageContainer" style={{ position: "absolute", ...position }} onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}>
+
+      <div className="ChatBar">
+            <div className="Room">{room}</div>
+            <button class="LeaveButton" onClick={handleLeaveRoom}>x</button>
+          </div>
+
+        <div className="ChatWindow" >
+         
           {messageList
           .filter((messageContent) => messageContent.room === room)
            .map((messageContent) => (
-            <div className={`Message ${messageContent.sender}`}>
-            <div className="User_Time">
-              {messageContent.sender === "me" ? "You" : `User with ID ${messageContent.socketId}`}, {messageContent.time}
+
+          <div className={`Message ${messageContent.sender}`}>
+
+            <div className="User_Time" style={{ color: getColor(messageContent.socketId) }}>
+              {messageContent.sender === "me" ? "You" : `User ${messageContent.socketId.substring(0, 5)}`}, {messageContent.time}
             </div>
-            <div className="MessageContent" style={{ color: getColor(messageContent.socketId) }}>{messageContent.message}</div>
+
+            <div className="MessageContent" >{messageContent.message}
             </div>
+
+          </div>
           ))}
+
           <div className="ChatInput">
-            <input className="SelectorInput"
+            <input className="SelectorInput" type="text"
               placeholder="Message"
               onChange={(event) => {
                 setMessage(event.target.value);
               }}
-            ></input>
-            <button class="JoinButton" onClick={handleSendMessage}>Send Message</button>
+              ></input>
+            <button class="JoinButton" onClick={handleSendMessage}>Send</button>
           </div>
+          
         </div>
+
       </div>
     </>
   );

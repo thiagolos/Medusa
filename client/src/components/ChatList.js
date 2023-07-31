@@ -4,7 +4,7 @@ import { useContext } from "react";
 
 function ChatList() {
 
-  const { roomLists, socket } = useContext(ChatContext);
+  const { roomLists, socket, room, leaveRoom } = useContext(ChatContext);
 
   const index = roomLists.findIndex((list) => list.socketId === socket.id);
 
@@ -12,18 +12,23 @@ function ChatList() {
     return 
   }
 
+
+
+
+  // const handleLeaveRoom = () => {
+  //   console.log('THE LEFT ROOM', room)
+  //   leaveRoom(room);
+  // };
+
   return (
     <>
-        <div className="ChatList">
-          <div>
-            {roomLists[index].rooms.map((room) => (
-              <div key={room.name}>
-                {room.name} - {room.time}
-                <Chat room={room.name} socket={socket} ></Chat>
-              </div>
-            ))}
-          </div>
-      </div>
+        <div>
+              {roomLists[index].rooms.map((room) => (
+                <div className="ChatList" key={room.name}>
+                  <Chat room={room.name} socket={socket} ></Chat>
+                </div>
+              ))}
+        </div>
     </>
   );
 

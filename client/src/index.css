@@ -82,21 +82,16 @@ body {
 }
 
 .JoinButton{
-  background-color: var(--success-color);
+  background-color: rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   padding: 10px 10px;
   border: none;
   cursor: pointer;
 }
 
-.blur {
-  background-color: red;
-}
-
 .SelectorInput{
   padding: 10px 10px;
-  background-color: var(--success-color);
-  backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.05);
   text-shadow: 0 0 0 #000;
   border: none;
   outline: none;
@@ -104,7 +99,7 @@ body {
 }
 
 input[type="text"]::placeholder {
-  color: var(--secondary-color); 
+  color: black;
 }
 
 input[type="text"] {
@@ -114,21 +109,52 @@ input[type="text"] {
 
 /* CHAT WINDOW */
 
+.LeaveButton {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 5px 9px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  text-align: center;
+}
+
 .ChatList{
-  position: absolute;
-  top: 10px;
-  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+
+.ChatBar{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: medium;
+  font-weight: medium;
+  background-color: rgba(255, 255, 255, 0.06);
+  padding: 5px;
+
+}
+
+.MessageContainer {
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .ChatWindow {
-  height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  max-height: 300px;
   overflow-y: scroll;
   border: none;
   padding: 10px;
 }
 
 .ChatWindow::-webkit-scrollbar {
-  width: 0.5em;
+  display: none;
 }
 
 .ChatWindow::-webkit-scrollbar-track {
@@ -139,38 +165,38 @@ input[type="text"] {
   background-color: transparent;
 }
 
-.MessageList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.ChatInput {
+  display: flex;
+  flex-direction: row;
+  gap: 5px
 }
 
 .MessageContent {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .User_Time {
   font-size: 12px;
-  color: #aaa;
   margin-bottom: 5px;
 }
 
 .Message {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 10px;
-  border-radius: 5px;
-  max-width: 80%;
+  border-radius: 6px;
   display: flex;
-  flex-direction: column; /* stack the message content vertically */
+  flex-direction: column; 
 }
 
 .Message.me {
-  background-color: #dcf8c6;
+  width: 80%;
+  background-color: rgba(255, 255, 255, 0.05);
   align-self: flex-end;
 }
 
 .Message.other {
-  background-color: #b2cded;
+  width: 80%;  
+  background-color: rgba(255, 255, 255, 0.05);
   align-self: flex-start;
 }
 

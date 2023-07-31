@@ -196,6 +196,20 @@ function ChatProvider ({ children }) {
   useEffect(() => {
     getAll();
   }, [])
+
+
+  const [positions, setPositions] = useState([]);
+
+  useEffect(() => {
+    const newPositions = [];
+    for (let i = 0; i < 10; i++) {
+      const top = Math.floor(Math.random() * window.innerHeight);
+      const left = Math.floor(Math.random() * window.innerWidth);
+      newPositions.push({ top, left });
+    }
+    setPositions(newPositions);
+  }, []);
+
  
 
   const value = {
@@ -212,6 +226,8 @@ function ChatProvider ({ children }) {
     leaveRoom,
     roomLists,
     setRoomLists,
+    positions,
+    setPositions
   }
 
   return (
