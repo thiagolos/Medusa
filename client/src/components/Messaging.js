@@ -4,17 +4,19 @@ import { ChatContext } from "../context/ChatContext";
 
 function Chat({room, socket}) {
 
-  const {setMessage, messageList, sendMessage} = useContext(MessageContext);
+  const {setMessage, messageList, sendMessage, message} = useContext(MessageContext);
   const {leaveRoom} = useContext(ChatContext);
 
   // MESSAGE FUNCTIONALITY 
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (e) => {
     sendMessage(room);
+    const parentNode = e.target.parentNode;
+    const input = parentNode.querySelector('input');
+    input.value = '';
   };
   
   const handleLeaveRoom = () => {
-    console.log('THE LEFT ROOM', room)
     leaveRoom(room);
   };
 
@@ -114,38 +116,38 @@ function Chat({room, socket}) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}>
 
-      <div className="ChatBar">
+          <div className="ChatBar">
             <div className="Room">{room}</div>
             <button class="LeaveButton" onClick={handleLeaveRoom}>x</button>
           </div>
 
-        <div className="ChatWindow" >
-          {messageList
-            .filter((messageContent) => messageContent.room === room)
-            .map((messageContent) => (
-              <div className={`Message ${messageContent.sender}`}>
+          <div className="ChatWindow" >
+            {messageList
+              .filter((messageContent) => messageContent.room === room)
+              .map((messageContent) => (
+                <div className={`Message ${messageContent.sender}`}>
 
-                <div className="User_Time" style={{ color: getColor(messageContent.socketId) }}>
-                  {messageContent.sender === "me" ? "You" : `User ${messageContent.socketId.substring(0, 5)}`}, {messageContent.time}
+                  <div className="User_Time" style={{ color: getColor(messageContent.socketId) }}>
+                    {messageContent.sender === "me" ? "You" : `User ${messageContent.socketId.substring(0, 5)}`}, {messageContent.time}
+                  </div>
+
+                  <div className="MessageContent" >{messageContent.message}
+                  </div>
+                  <div ref={messagesEndRef}></div>
                 </div>
+            ))}
 
-                <div className="MessageContent" >{messageContent.message}
+                <div className="ChatInput">
+                  <input className="SelectorInput" type="text"
+                    placeholder="Message"
+                    onChange={(event) => {
+                      setMessage(event.target.value);
+                    }}
+                    ></input>
+                  <button class="JoinButton" onClick={handleSendMessage}>Send</button>
                 </div>
-                <div ref={messagesEndRef}></div>
-              </div>
-          ))}
-
-          <div className="ChatInput">
-            <input className="SelectorInput" type="text"
-              placeholder="Message"
-              onChange={(event) => {
-                setMessage(event.target.value);
-              }}
-              ></input>
-            <button class="JoinButton" onClick={handleSendMessage}>Send</button>
-          </div>
           
-        </div>
+          </div>
 
       </div>
     </>

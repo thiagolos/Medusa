@@ -4,7 +4,7 @@ import ChatList from "./ChatList"
 
 function RoomSelector() {
 
-  const {setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible} = useContext(ChatContext) 
+  const {room, setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible} = useContext(ChatContext) 
 
   const handleJoinRoom = () => {
     setSelectorVisible(false);
