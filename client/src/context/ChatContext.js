@@ -12,18 +12,18 @@ function ChatProvider ({ children }) {
   // DEFINTIONS
 
   const [room, setRoom] = useState("");
-  const [chatrooms, setChatrooms] = useState([])
+  const [chatrooms, setChatrooms] = useState([]);
   const [userCount, setUserCount] = useState(0);
 
-  const [isSelectorVisible, setSelectorVisible] = useState(true)
-  const [isSelectorClosed, setSelectorClosed] = useState(false)
+  const [isSelectorVisible, setSelectorVisible] = useState(true);
+  const [isSelectorClosed, setSelectorClosed] = useState(false);
 
 
   const roomData = {
     name: room,
     time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
     creator: socket.id,
-  }
+  };
 
   // ROUTES
 
@@ -57,31 +57,31 @@ function ChatProvider ({ children }) {
 
   const joinRoom = () => {
     if(room !== "") {
-      const existingRoom = roomLists.some((list) => list.rooms.some((r) => r.name === room))
-      if (existingRoom) {
+      const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === room))
+      if (userAlreadyInRoom) {
         console.log("You are already in this room")
         return 
       }
-      if (chatrooms.some((c) => c.name === room)){
+      const existingRoom = chatrooms.some((c) => c.name === room);
+      if (existingRoom){
         socket.emit("join_room", roomData);
-
+        
         setRoomLists((prevRoomLists) => {
           const index = prevRoomLists.findIndex(
             (list) => list.socketId === socket.id
-          );
-          const updatedRooms = [
-            ...prevRoomLists[index].rooms,
-            { name: room, time: roomData.time },
-          ];
-          const updatedList = {
-            socketId: socket.id,
-            rooms: updatedRooms,
-          };
-          const updatedRoomLists = [...prevRoomLists];
-          updatedRoomLists[index] = updatedList;
-          return updatedRoomLists;
+            );
+            const updatedRooms = [
+              ...prevRoomLists[index].rooms,
+              { name: room, time: roomData.time },
+            ];
+            const updatedList = {
+              socketId: socket.id,
+              rooms: updatedRooms,
+            };
+            const updatedRoomLists = [...prevRoomLists];
+            updatedRoomLists[index] = updatedList;
+            return updatedRoomLists;
         });
-
       } else {
         socket.emit("create_room", room);
         socket.emit("join_room", roomData);
@@ -162,17 +162,17 @@ function ChatProvider ({ children }) {
       setChatrooms(updatedChatrooms);
       console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
 
-      if (userData.userCount === 1) {
-        const messageData = {
-          user: socket.id,
-          room: userData.room,
-          message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
-          time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-          sender: "me",
-          socketId: socket.id,
-        };
-        socket.emit("send_message", messageData);
-      }
+      // if (userData.userCount === 1) {
+      //   const messageData = {
+      //     user: socket.id,
+      //     room: userData.room,
+      //     message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
+      //     time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+      //     sender: "me",
+      //     socketId: socket.id,
+      //   };
+      //   socket.emit("send_message", messageData);
+      // }
     });
 
 
@@ -184,7 +184,7 @@ function ChatProvider ({ children }) {
 
   useEffect(() => {
     socket.on("user_leaves", (userData) => {
-      console.log(userData)
+      // console.log(userData)
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {
@@ -197,7 +197,7 @@ function ChatProvider ({ children }) {
         }
       });
       setChatrooms(updatedChatrooms);
-      console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
+      // console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
     return () => {
@@ -223,10 +223,10 @@ function ChatProvider ({ children }) {
     setPositions(newPositions);
   }, []);
 
-  useEffect(()=>{
-    console.log('CHATROOMS', chatrooms)
-    console.log('Chatrooms, users', chatrooms[0])
-  })
+  // useEffect(()=>{
+  //   console.log('CHATROOMS', chatrooms)
+  //   console.log('Chatrooms, users', chatrooms[0])
+  // })
 
  
 

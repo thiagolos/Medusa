@@ -4,8 +4,8 @@ import { ChatContext } from "../context/ChatContext";
 
 function Chat({room, socket}) {
 
-  const {setMessage, messageList, sendMessage} = useContext(MessageContext) 
-  const {leaveRoom} = useContext(ChatContext) 
+  const {setMessage, messageList, sendMessage} = useContext(MessageContext);
+  const {leaveRoom} = useContext(ChatContext);
 
   // MESSAGE FUNCTIONALITY 
 
@@ -123,21 +123,32 @@ function Chat({room, socket}) {
           </div>
 
         <div className="ChatWindow" >
-         
-          {messageList
-          .filter((messageContent) => messageContent.room === room)
-           .map((messageContent) => (
+          {/* {(messageList.filter((messageContent) => messageContent.room === room).length) < 1 && (
+            <div className={'system'}>
 
-          <div className={`Message ${messageContent.sender}`}>
-
-            <div className="User_Time" style={{ color: getColor(messageContent.socketId) }}>
-              {messageContent.sender === "me" ? "You" : `User ${messageContent.socketId.substring(0, 5)}`}, {messageContent.time}
+            <div className="User_Time" style={{ color: 'blue' }}>
+              User System, {Date.now()}
             </div>
 
-            <div className="MessageContent" >{messageContent.message}
+            <div className="MessageContent" >
+              Hello new room!
             </div>
             <div ref={messagesEndRef}></div>
           </div>
+          )} */}
+          {messageList
+            .filter((messageContent) => messageContent.room === room)
+            .map((messageContent) => (
+              <div className={`Message ${messageContent.sender}`}>
+
+                <div className="User_Time" style={{ color: getColor(messageContent.socketId) }}>
+                  {messageContent.sender === "me" ? "You" : `User ${messageContent.socketId.substring(0, 5)}`}, {messageContent.time}
+                </div>
+
+                <div className="MessageContent" >{messageContent.message}
+                </div>
+                <div ref={messagesEndRef}></div>
+              </div>
           ))}
 
           <div className="ChatInput">

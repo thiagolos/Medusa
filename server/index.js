@@ -98,6 +98,13 @@ io.on("connection", (socket) => {
         userCount: chatroom.users,
         usernames: chatroom.usernames,
       });
+
+      console.log('chatroom.users <= 1:', chatroom.users <= 1);
+      if (chatroom.users <= 1) {
+        socket.emit('joined_empty_room', {
+          room: chatroom.name
+        });
+      }
       
       console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`)
     }
