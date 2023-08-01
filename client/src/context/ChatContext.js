@@ -1,7 +1,5 @@
 import io from "socket.io-client";
-import { createContext, useContext, useEffect, useState } from "react";
-import { MessageContext } from "./MessageContext";
-import SendMessageOnJoin from "../components/SendMessageOnJoin";
+import { createContext, useEffect, useState } from "react";
 
 const ChatContext = createContext();
 const socket = io.connect("http://localhost:3001");
@@ -11,20 +9,27 @@ function ChatProvider ({ children }) {
 
   // DEFINTIONS
 
+  // ROOOMS
   const [room, setRoom] = useState("");
   const [chatrooms, setChatrooms] = useState([]);
   const [userCount, setUserCount] = useState(0);
-
+  const [roomLists, setRoomLists] = useState([]);
+  
+    const roomData = {
+      name: room,
+      time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+      creator: socket.id,
+    };
+  
+  // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
+  
+  // POSITIONS
+  const [positions, setPositions] = useState([]);
 
 
-  const roomData = {
-    name: room,
-    time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-    creator: socket.id,
-  };
-
+  // LOGIC
   // ROUTES
 
   function getAll () {
@@ -33,25 +38,6 @@ function ChatProvider ({ children }) {
     .then((data) => setChatrooms(data))
     .catch((err) => console.error(err));
   }
-
-  // ERSTELLUNG DES STORAGE OBJEKTS
-
-  const [roomLists, setRoomLists] = useState([]);
-
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      setRoomLists((prevRoomLists) => [
-        ...prevRoomLists,
-        { socketId: socket.id, rooms: [] },
-      ]);
-    });
-    return () => {
-      socket.off("connect");
-    };
-  }, []);
-
-  
 
   // FUNCTIONS
 
@@ -105,10 +91,6 @@ function ChatProvider ({ children }) {
       }
     }
   };
-
-  // useEffect(() => {
-  //   console.log("roomlists after update ChatContext:", roomLists)
-  // })
   
   const leaveRoom = (room) => {
     socket.emit("leave_room", room);
@@ -129,13 +111,24 @@ function ChatProvider ({ children }) {
     });
   }
 
-  // useEffect(() => {
-  //   console.log("roomlists after leave:", roomLists)
-  // })
-  
+ 
 
   // USE EFFECTS
+  // ERSTELLUNG DES STORAGE OBJEKTS
 
+  useEffect(() => {
+    socket.on("connect", () => {
+      setRoomLists((prevRoomLists) => [
+        ...prevRoomLists,
+        { socketId: socket.id, rooms: [] },
+      ]);
+    });
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
+
+  // UPDATE CHATRROMS
 
   useEffect(() => {
     socket.on("update_chatrooms", (chatrooms) => {
@@ -145,6 +138,8 @@ function ChatProvider ({ children }) {
       socket.off("update_chatrooms");
     };
   }, []);
+
+  // USER JOIN
 
   useEffect(() => {
     socket.on("user_join", (userData) => {
@@ -161,30 +156,17 @@ function ChatProvider ({ children }) {
       });
       setChatrooms(updatedChatrooms);
       console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
-
-      // if (userData.userCount === 1) {
-      //   const messageData = {
-      //     user: socket.id,
-      //     room: userData.room,
-      //     message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
-      //     time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-      //     sender: "me",
-      //     socketId: socket.id,
-      //   };
-      //   socket.emit("send_message", messageData);
-      // }
     });
-
 
     return () => {
       socket.off("user_join");
     };
   }, [chatrooms]);
 
+  // USER LEAVE
 
   useEffect(() => {
     socket.on("user_leaves", (userData) => {
-      // console.log(userData)
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {
@@ -197,21 +179,21 @@ function ChatProvider ({ children }) {
         }
       });
       setChatrooms(updatedChatrooms);
-      // console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
+      console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
     return () => {
-      socket.off("user_geht");
+      socket.off("user_leaves");
     };
   }, [chatrooms])
 
+  // GET ALL 
 
   useEffect(() => {
     getAll();
   }, [])
 
-
-  const [positions, setPositions] = useState([]);
+  // POSITIONS
 
   useEffect(() => {
     const newPositions = [];
@@ -223,11 +205,19 @@ function ChatProvider ({ children }) {
     setPositions(newPositions);
   }, []);
 
+
+  // TEST LOGS
+
   // useEffect(()=>{
   //   console.log('CHATROOMS', chatrooms)
   //   console.log('Chatrooms, users', chatrooms[0])
   // })
-
+ // useEffect(() => {
+  //   console.log("roomlists after leave:", roomLists)
+  // })
+    // useEffect(() => {
+  //   console.log("roomlists after update ChatContext:", roomLists)
+  // })
  
 
   const value = {
@@ -254,7 +244,6 @@ function ChatProvider ({ children }) {
 
   return (
     < ChatContext.Provider value={value} >
-      {/* <SendMessageOnJoin /> */}
       {children}
     </ ChatContext.Provider>
   )

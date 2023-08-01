@@ -6,11 +6,15 @@ const MessageContext = createContext();
 
 function MessageProvider ({ children }) {
 
-  const {socket, setRoom, roomLists, setRoomLists, setSelectorClosed, setSelectorVisible} = useContext(ChatContext)
+  const {socket, setRoom, roomLists, setRoomLists} = useContext(ChatContext)
+
+  // DEFINITIONS
 
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([])
 
+
+  // MESSAGE FUNCTIONALITY
 
   function handleRoomButtonClick(roomName) {
 
@@ -70,6 +74,9 @@ function MessageProvider ({ children }) {
     }
   };
 
+  // USE EFFECTS
+  // RECEIVE MESSAGE & JOIN EMPTY ROOM
+
   useEffect(() => {
     socket.on("receive_message", (data) => {
       console.log('message received', data)
@@ -80,7 +87,6 @@ function MessageProvider ({ children }) {
       setMessageList((list) => [...list, messageData]);
       console.log('messageList', messageList)
     });
-
 
     socket.on('joined_empty_room', (data) => {
       console.log('joined_empty_room:', socket.id);
@@ -95,7 +101,6 @@ function MessageProvider ({ children }) {
       setMessageList((list) => [...list, messageData]);
     });
 
-
     return () => {
       socket.off("receive_message");
       socket.off("joined_empty_room");
@@ -103,14 +108,13 @@ function MessageProvider ({ children }) {
    
   }, []);
 
+
+  // TEST LOGS
+
   // useEffect(() => {
   //   console.log('messageList:', messageList);
   // }, [messageList]);
   
-
-  
-
-
   const value = {
     message,
     setMessage,

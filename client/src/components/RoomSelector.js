@@ -6,9 +6,6 @@ function RoomSelector() {
 
   const {setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible} = useContext(ChatContext) 
 
-  // const [isSelectorVisible, setSelectorVisible] = useState(true)
-  // const [isSelectorClosed, setSelectorClosed] = useState(false)
-
   const handleJoinRoom = () => {
     setSelectorVisible(false);
     setSelectorClosed(true)

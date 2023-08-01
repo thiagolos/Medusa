@@ -72,8 +72,7 @@ function Chat({room, socket}) {
     setPosition({ top: calculateTop(), left: calculateLeft() });
   }, []);
 
-  // MOUSE 
-
+  // MOUSE DRAG AND DROP
 
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -98,8 +97,6 @@ function Chat({room, socket}) {
   function handleMouseUp() {
     setIsDragging(false);
   }
-  const chatWindowRef = useRef(null);
-
   const messagesEndRef = useRef(null)
 
   const scrollToBottom = () => {
@@ -123,19 +120,6 @@ function Chat({room, socket}) {
           </div>
 
         <div className="ChatWindow" >
-          {/* {(messageList.filter((messageContent) => messageContent.room === room).length) < 1 && (
-            <div className={'system'}>
-
-            <div className="User_Time" style={{ color: 'blue' }}>
-              User System, {Date.now()}
-            </div>
-
-            <div className="MessageContent" >
-              Hello new room!
-            </div>
-            <div ref={messagesEndRef}></div>
-          </div>
-          )} */}
           {messageList
             .filter((messageContent) => messageContent.room === room)
             .map((messageContent) => (

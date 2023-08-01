@@ -9,15 +9,14 @@ function RoomList() {
 
 
   const handleButtonClick = (roomName) => {
-    handleRoomButtonClick(roomName); // Call the existing function
-    secondFunction(roomName); // Call the second function
+    handleRoomButtonClick(roomName); 
+    toggleSelector(roomName);
   };
 
-  const secondFunction = () => {
+  const toggleSelector = () => {
     setSelectorVisible(false);
     setSelectorClosed(true);
   };
-
 
   return (
     <>
@@ -26,7 +25,7 @@ function RoomList() {
         <div className="RoomListTop">
           <div>
             {chatrooms.map((chatroom) => {
-              const roomName = chatroom.name; // Store the chatroom name in a separate variable
+              const roomName = chatroom.name; 
               return (
                 <button className="RoomButton"
                   key={chatroom._id}

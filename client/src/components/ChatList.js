@@ -12,9 +12,6 @@ function ChatList() {
     return 
   }
 
-
-
-
   return (
     <>
         <div>

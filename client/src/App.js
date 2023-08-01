@@ -7,7 +7,6 @@ import { ChatContext } from "./context/ChatContext";
 
 function App() {
 
-
   return (
     <>
       <div className="App">
