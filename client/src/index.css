@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=IBM+Plex+Serif:wght@300;500;600;700&family=Open+Sans:wght@500&family=Oswald:wght@200;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
   --primary-color: #253B8A;
@@ -20,8 +20,8 @@ body {
 }
 
 body {
-  font-family: 'IBM Plex Serif', serif;
-  font-weight: 400;
+  font-family: 'Inter', 'sans-serif';
+  font-weight: 600;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -54,17 +54,17 @@ body {
   background: none;
   border: none;
   padding: 0;
-  font: inherit;
   cursor: pointer;
-  font-size: xxx-large;
-  font-weight: bolder;
+  font-family: 'Inter', sans-serif;
+  font-size: 52px;
+  font-weight: 700;
   text-transform: uppercase;
   padding: 10px 10px;
 }
 
 
-
 /* ROOM SELECTOR */
+
 .RoomSelector {
   position: absolute;
   bottom: 0;
@@ -151,6 +151,8 @@ input[type="text"] {
 }
 
 .MessageContainer {
+  display: flex;
+  flex-direction: column;
   border-radius: 6px;
   overflow: hidden;
   backdrop-filter: blur(15px);
@@ -160,9 +162,10 @@ input[type="text"] {
 .ChatWindow {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* max-height: 300px;
+  max-width: 235px; */
   max-height: 300px;
-  max-width: 235px;
+  width: 235px;
   overflow-y: scroll;
   border: none;
   padding: 10px;
@@ -181,26 +184,41 @@ input[type="text"] {
 }
 
 .ChatInput {
+  position: absolute;
+  bottom: 10px;
   display: flex;
   flex-direction: row;
-  gap: 5px
+  gap: 5px;
+  word-wrap: break-word;
+
 }
+
+.ChatInputWrapper{
+}
+
+.MessageWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 47px;
+}
+
+.Message {
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column; 
+}
+
 
 .MessageContent {
   margin-bottom: 10px;
+  word-wrap: break-word;
 }
 
 .User_Time {
   font-size: 12px;
   margin-bottom: 5px;
-}
-
-.Message {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column; 
 }
 
 .Message.me {
@@ -221,8 +239,5 @@ input[type="text"] {
   margin-bottom: 5px;
 }
 
-.MessageContent {
-  word-wrap: break-word;
-}
 
 /* */

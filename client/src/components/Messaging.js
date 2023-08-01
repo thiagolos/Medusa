@@ -122,6 +122,7 @@ function Chat({room, socket}) {
           </div>
 
           <div className="ChatWindow" >
+            <div className="MessageWrapper">
             {messageList
               .filter((messageContent) => messageContent.room === room)
               .map((messageContent) => (
@@ -134,18 +135,23 @@ function Chat({room, socket}) {
                   <div className="MessageContent" >{messageContent.message}
                   </div>
                   <div ref={messagesEndRef}></div>
+
                 </div>
             ))}
+            </div>
 
-                <div className="ChatInput">
-                  <input className="SelectorInput" type="text"
-                    placeholder="Message"
-                    onChange={(event) => {
-                      setMessage(event.target.value);
-                    }}
-                    ></input>
-                  <button class="JoinButton" onClick={handleSendMessage}>Send</button>
+                <div className="ChatInputWrapper">
+                  <div className="ChatInput">
+                    <input className="SelectorInput" type="text"
+                      placeholder="Message"
+                      onChange={(event) => {
+                        setMessage(event.target.value);
+                      }}>
+                    </input>
+                    <button class="JoinButton" onClick={handleSendMessage}>Send</button>
+                  </div>
                 </div>
+               
           
           </div>
 
