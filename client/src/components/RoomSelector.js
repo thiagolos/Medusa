@@ -40,7 +40,6 @@ function RoomSelector() {
           <button onClick={handleToggleSelector}>+</button>
         </div>
       )}
-      <ChatList></ChatList>
     </>
   );
 }
