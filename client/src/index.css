@@ -16,7 +16,6 @@
 html,
 body {
   height: 100%;
-  background-color: var(--primary-color);
 }
 
 body {
@@ -33,33 +32,42 @@ body {
   align-items: center;
   justify-content: flex-start;
   height: 100vh;
+  background-color: rgb(210,185,31);
+}
 
+.page-border {
+  position: fixed; 
+  inset:0; 
+  padding:16px; 
+  border: 16px solid rgb(217,207,196); 
+  z-index: 9999;
+  pointer-events: none;
 }
 
 /* ROOM LIST */
 
 
-.AllRoomLists{
-  display: flex;
-  flex-direction: row;
-}
 
-.RoomListTop {
+.RoomList {
   display: flex;
   flex-direction: column;
-
 }
+
+/* .room-list-container {
+  margin-top: 16px;
+  z-index: 10;
+} */
 
 .RoomButton{
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
   font-size: 52px;
   font-weight: 700;
   text-transform: uppercase;
-  padding: 10px 10px;
+  margin: -8px 40px;
+  color: inherit;
 }
 
 
@@ -157,6 +165,7 @@ input[type="text"] {
   overflow: hidden;
   backdrop-filter: blur(15px);
   background-color: rgba(255, 255, 255, 0.05);
+  z-index: 10000;
 }
 
 .ChatWindow {

@@ -14,6 +14,7 @@ function ChatProvider ({ children }) {
   const [chatrooms, setChatrooms] = useState([]);
   const [userCount, setUserCount] = useState(0);
   const [roomLists, setRoomLists] = useState([]);
+  const [backgroundColor, setBackgroundColor] = useState([])
   
     const roomData = {
       name: room,

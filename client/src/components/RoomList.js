@@ -20,9 +20,7 @@ function RoomList() {
 
   return (
     <>
-      <div className="AllRoomLists">
-
-        <div className="RoomListTop">
+        <div className="RoomList">
           <div>
             {chatrooms.map((chatroom) => {
               const roomName = chatroom.name; 
@@ -37,9 +35,6 @@ function RoomList() {
             })}
           </div>
         </div>
-
-      </div>
-
     </>
   );
 }
