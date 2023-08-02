@@ -14,7 +14,15 @@ function ChatProvider ({ children }) {
   const [chatrooms, setChatrooms] = useState([]);
   const [userCount, setUserCount] = useState(0);
   const [roomLists, setRoomLists] = useState([]);
-  const [backgroundColor, setBackgroundColor] = useState([])
+
+  const colors = ['rgb(210, 185, 31)', 'rgb(37,73,155)', 'rgb(130,125,188', 'rgb(244,90,51)', 'rgb(217,117,117)'];
+  const [bgColor, setBgColor] = useState(colors[0]);
+
+  function handleBackgroundColor() {
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    setBgColor(randomColor);
+    console.log('I was executed')
+  }
   
     const roomData = {
       name: room,
@@ -240,7 +248,11 @@ function ChatProvider ({ children }) {
     setSelectorClosed,
     setSelectorVisible,
     isSelectorClosed,
-    isSelectorVisible
+    isSelectorVisible,
+    colors,
+    bgColor,
+    setBgColor,
+    handleBackgroundColor
   }
 
   return (

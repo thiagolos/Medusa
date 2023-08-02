@@ -4,13 +4,18 @@ import { MessageContext } from "../context/MessageContext";
 
 
 function RoomList() {
-  const { chatrooms, setSelectorClosed,setSelectorVisible } = useContext(ChatContext);
+  const { chatrooms, setSelectorClosed,setSelectorVisible, colors, setBgColor, bgColor, handleBackgroundColor} = useContext(ChatContext);
   const { handleRoomButtonClick } = useContext(MessageContext);
+
+  
 
 
   const handleButtonClick = (roomName) => {
     handleRoomButtonClick(roomName); 
     toggleSelector(roomName);
+    handleBackgroundColor()
+    console.log('I was executed handleBf')
+
   };
 
   const toggleSelector = () => {
@@ -20,7 +25,7 @@ function RoomList() {
 
   return (
     <>
-        <div className="RoomList">
+        <div className="RoomList" >
           <div>
             {chatrooms.map((chatroom) => {
               const roomName = chatroom.name; 

@@ -21,18 +21,18 @@ const io = new Server(server, {
 
 // db
 
-const uri = 'mongodb://127.0.0.1:27017/chatapp_test_3';
+const uri = 'mongodb://127.0.0.1:27017/chatapp_test_6';
 
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const chatroomSchema_test_3 = new mongoose.Schema({
+const chatroomSchema_test_6 = new mongoose.Schema({
   name: String,
   users: { type: Number, default: 0 },
   usernames: { type: [String], default: []}
 });
 
-const Chatroom = mongoose.model('Chatroom', chatroomSchema_test_3);
+const Chatroom = mongoose.model('Chatroom', chatroomSchema_test_6);
 
 
 // router
@@ -65,6 +65,13 @@ router.get('/chatrooms', async (req, res, next) => {
 app.use(express.json());
 app.use(router);
 
+// const fillDb = async (roomName) => {
+//   const chatroom = new Chatroom({name: roomName});
+//   await chatroom.save();
+// }
+// fillDb('Persian Philosophy');
+// fillDb('Berlin Dating');
+// fillDb('We need to talk about Barbie');
 
 // sockets 
 
