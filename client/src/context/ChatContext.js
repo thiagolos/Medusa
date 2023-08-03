@@ -1,8 +1,7 @@
-import io from "socket.io-client";
 import { createContext, useEffect, useState } from "react";
+import { socket, addSocketListener, getAll, removeSocketListener, setRoomListsOnConnect, socketEmit } from "../apiService.js";
 
 const ChatContext = createContext();
-const socket = io.connect("http://localhost:3001");
 
 function ChatProvider ({ children }) {
 
@@ -23,17 +22,17 @@ function ChatProvider ({ children }) {
     setBgColor(randomColor);
     console.log('I was executed')
   }
-  
+
     const roomData = {
       name: room,
       time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
       creator: socket.id,
     };
-  
+
   // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
-  
+
   // POSITIONS
   const [positions, setPositions] = useState([]);
 
@@ -41,12 +40,7 @@ function ChatProvider ({ children }) {
   // LOGIC
   // ROUTES
 
-  function getAll () {
-    fetch('http://localhost:3001/chatrooms')
-    .then((res) => res.json())
-    .then((data) => setChatrooms(data))
-    .catch((err) => console.error(err));
-  }
+
 
   // FUNCTIONS
 
@@ -55,12 +49,12 @@ function ChatProvider ({ children }) {
       const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === room))
       if (userAlreadyInRoom) {
         console.log("You are already in this room")
-        return 
+        return
       }
       const existingRoom = chatrooms.some((c) => c.name === room);
       if (existingRoom){
-        socket.emit("join_room", roomData);
-        
+        socketEmit("join_room", roomData);
+
         setRoomLists((prevRoomLists) => {
           const index = prevRoomLists.findIndex(
             (list) => list.socketId === socket.id
@@ -78,8 +72,8 @@ function ChatProvider ({ children }) {
             return updatedRoomLists;
         });
       } else {
-        socket.emit("create_room", room);
-        socket.emit("join_room", roomData);
+        socketEmit("create_room", room);
+        socketEmit("join_room", roomData);
 
         setRoomLists((prevRoomLists) => {
           const index = prevRoomLists.findIndex(
@@ -100,9 +94,9 @@ function ChatProvider ({ children }) {
       }
     }
   };
-  
+
   const leaveRoom = (room) => {
-    socket.emit("leave_room", room);
+    socketEmit("leave_room", room);
     setRoomLists((prevRoomLists) => {
       const index = prevRoomLists.findIndex(
         (list) => list.socketId === socket.id
@@ -120,38 +114,38 @@ function ChatProvider ({ children }) {
     });
   }
 
- 
+
 
   // USE EFFECTS
   // ERSTELLUNG DES STORAGE OBJEKTS
 
   useEffect(() => {
-    socket.on("connect", () => {
+    addSocketListener("connect", () => {
       setRoomLists((prevRoomLists) => [
         ...prevRoomLists,
         { socketId: socket.id, rooms: [] },
       ]);
     });
     return () => {
-      socket.off("connect");
+      removeSocketListener("connect");
     };
   }, []);
 
   // UPDATE CHATRROMS
 
   useEffect(() => {
-    socket.on("update_chatrooms", (chatrooms) => {
+    addSocketListener("update_chatrooms", (chatrooms) => {
       setChatrooms(chatrooms);
     });
     return () => {
-      socket.off("update_chatrooms");
+      removeSocketListener("update_chatrooms");
     };
   }, []);
 
-  // USER JOIN
+  // USER JOINget
 
   useEffect(() => {
-    socket.on("user_join", (userData) => {
+    addSocketListener("user_join", (userData) => {
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {
@@ -168,14 +162,14 @@ function ChatProvider ({ children }) {
     });
 
     return () => {
-      socket.off("user_join");
+      removeSocketListener("user_join");
     };
   }, [chatrooms]);
 
   // USER LEAVE
 
   useEffect(() => {
-    socket.on("user_leaves", (userData) => {
+    addSocketListener("user_leaves", (userData) => {
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {
@@ -192,14 +186,16 @@ function ChatProvider ({ children }) {
     });
 
     return () => {
-      socket.off("user_leaves");
+      removeSocketListener("user_leaves");
     };
   }, [chatrooms])
 
-  // GET ALL 
+  // GET ALL
 
   useEffect(() => {
-    getAll();
+    getAll()
+      .then((data) => setChatrooms(data))
+      .catch((err) => console.log(err));
   }, [])
 
   // POSITIONS
@@ -227,7 +223,7 @@ function ChatProvider ({ children }) {
     // useEffect(() => {
   //   console.log("roomlists after update ChatContext:", roomLists)
   // })
- 
+
 
   const value = {
     roomData,
