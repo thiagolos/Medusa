@@ -1,24 +1,20 @@
-import Chatroom from "../models/chatroom.model.js";
+import dbModels from "../models/chatroom.model.js";
 import { io } from "../index.js";
 
 const socketInit = function (socket) {
-  console.log(`User Connected: ${socket.id}`);
 
   socket.on("send_message", (data) => {
-    console.log('message from frontend', data)
     socket.to(data.room).emit("receive_message", data)
-    console.log('message to room:', data.room)
   });
 
   socket.on("create_room", async(roomName) => {
-    const chatroom = new Chatroom({name: roomName});
-    await chatroom.save();
-    console.log(`New chatroom created: ${roomName}`)
-    io.emit("update_chatrooms", await Chatroom.find({}))
+    dbModels.addOrUpdate(roomName);
+    io.emit("update_chatrooms", await dbModels.getAll())
   })
 
   socket.on("join_room", async (data) => {
-    const chatroom = await Chatroom.findOne({name: data.name});
+    const chatroom = await dbModels.getOne(data.name);
+    
     if (chatroom) {
       socket.join(chatroom.name);
       chatroom.users += 1;
@@ -32,28 +28,22 @@ const socketInit = function (socket) {
         usernames: chatroom.usernames,
       });
 
-      console.log('chatroom.users <= 1:', chatroom.users <= 1);
       if (chatroom.users <= 1) {
         socket.emit('joined_empty_room', {
           room: chatroom.name
         });
       }
-
-      console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`)
     }
   })
 
   socket.on("leave_room", async (roomName) => {
-    console.log(roomName)
     socket.leave(roomName);
+    const chatroom = await dbModels.getOne(roomName);
 
-    const chatroom = await Chatroom.findOne({name: roomName});
     if (chatroom) {
       chatroom.users -= 1;
       chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
       await chatroom.save();
-
-      console.log(chatroom.name, chatroom.users, chatroom.usernames)
 
       io.emit("user_leaves", {
         room: chatroom.name,
@@ -62,19 +52,16 @@ const socketInit = function (socket) {
         usernames: chatroom.usernames,
       });
 
-      console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
-
       if (chatroom.users === 0) {
-        await Chatroom.deleteOne({_id: chatroom._id});
-
-        console.log(`Chatroom ${chatroom.name} has been deleted.`);
-        io.emit("update_chatrooms", await Chatroom.find({}));
+        await dbModels.removeOne(chatroom._id);
+        io.emit("update_chatrooms", await dbModels.getAll());
       }
     }
   });
 
   socket.on("disconnect", async () => {
-    const chatrooms = await Chatroom.find({ usernames: socket.id });
+    const chatrooms = await dbModels.getMany(socket.id);
+
     for (const chatroom of chatrooms) {
       chatroom.users -= 1;
       chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
@@ -87,16 +74,11 @@ const socketInit = function (socket) {
         usernames: chatroom.usernames,
       });
 
-      console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}. Usernames: ${chatroom.usernames.join(", ")}`);
-
       if (chatroom.users === 0) {
-        await Chatroom.deleteOne({_id: chatroom._id});
-
-        console.log(`Chatroom ${chatroom.name} has been deleted.`);
-        io.emit("update_chatrooms", await Chatroom.find({}));
+        await dbModels.removeOne(chatroom._id);
+        io.emit("update_chatrooms", await dbModels.getAll());
       }
     }
-    console.log(`User disconnected: ${socket.id}`);
   });
 };
 
