@@ -1,7 +1,6 @@
 import { Router } from "express";
 import Chatroom from './models/chatroom.model.js';
 
-
 const router = new Router();
 
 router.post('/chatrooms', async (req, res, next) => {

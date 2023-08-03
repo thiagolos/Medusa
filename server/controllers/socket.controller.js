@@ -1,8 +1,7 @@
-import { io } from '../index.js';
-import Chatroom from '../models/chatroom.model.js';
+import Chatroom from "../models/chatroom.model.js";
+import { io } from "../index.js";
 
-
-function socketIoInit(socket) {
+const socketInit = function (socket) {
   console.log(`User Connected: ${socket.id}`);
 
   socket.on("send_message", (data) => {
@@ -99,8 +98,6 @@ function socketIoInit(socket) {
     }
     console.log(`User disconnected: ${socket.id}`);
   });
-}
+};
 
-export default socketIoInit;
-    // const chatrooms = await Chatroom.find({});
-    // io.to(socket.id).emit("chatrooms_list", chatrooms);
+export default socketInit;
