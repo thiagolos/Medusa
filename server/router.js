@@ -1,4 +1,6 @@
 import { Router } from "express";
+import Chatroom from './models/chatroom.model.js';
+
 
 const router = new Router();
 

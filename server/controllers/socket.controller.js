@@ -1,7 +1,8 @@
-import { io } from '../index';
-import Chatroom from '../models/chatroom.model';
+import { io } from '../index.js';
+import Chatroom from '../models/chatroom.model.js';
 
-io.on("connection", (socket) => {
+
+function socketIoInit(socket) {
   console.log(`User Connected: ${socket.id}`);
 
   socket.on("send_message", (data) => {
@@ -25,7 +26,7 @@ io.on("connection", (socket) => {
       chatroom.usernames.push(socket.id)
       await chatroom.save();
 
-      io.emit("user_join", { 
+      io.emit("user_join", {
         room: chatroom.name,
         username: socket.id,
         userCount: chatroom.users,
@@ -38,24 +39,24 @@ io.on("connection", (socket) => {
           room: chatroom.name
         });
       }
-      
+
       console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`)
     }
   })
-   
+
   socket.on("leave_room", async (roomName) => {
     console.log(roomName)
     socket.leave(roomName);
 
     const chatroom = await Chatroom.findOne({name: roomName});
     if (chatroom) {
-      chatroom.users -= 1; 
-      chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id); 
+      chatroom.users -= 1;
+      chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
       await chatroom.save();
 
       console.log(chatroom.name, chatroom.users, chatroom.usernames)
 
-      io.emit("user_leaves", { 
+      io.emit("user_leaves", {
         room: chatroom.name,
         username: socket.id,
         userCount: chatroom.users,
@@ -65,10 +66,10 @@ io.on("connection", (socket) => {
       console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
 
       if (chatroom.users === 0) {
-        await Chatroom.deleteOne({_id: chatroom._id}); 
+        await Chatroom.deleteOne({_id: chatroom._id});
 
         console.log(`Chatroom ${chatroom.name} has been deleted.`);
-        io.emit("update_chatrooms", await Chatroom.find({})); 
+        io.emit("update_chatrooms", await Chatroom.find({}));
       }
     }
   });
@@ -80,7 +81,7 @@ io.on("connection", (socket) => {
       chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
       await chatroom.save();
 
-      io.to(chatroom.name).emit("user_geht", { 
+      io.to(chatroom.name).emit("user_geht", {
         room: chatroom.name,
         username: socket.id,
         userCount: chatroom.users,
@@ -88,18 +89,18 @@ io.on("connection", (socket) => {
       });
 
       console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}. Usernames: ${chatroom.usernames.join(", ")}`);
-      
+
       if (chatroom.users === 0) {
-        await Chatroom.deleteOne({_id: chatroom._id}); 
+        await Chatroom.deleteOne({_id: chatroom._id});
 
         console.log(`Chatroom ${chatroom.name} has been deleted.`);
-        io.emit("update_chatrooms", await Chatroom.find({})); 
+        io.emit("update_chatrooms", await Chatroom.find({}));
       }
     }
     console.log(`User disconnected: ${socket.id}`);
   });
+}
 
-});
-
+export default socketIoInit;
     // const chatrooms = await Chatroom.find({});
     // io.to(socket.id).emit("chatrooms_list", chatrooms);

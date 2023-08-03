@@ -1,4 +1,4 @@
-import mongoose from './index';
+import mongoose from './index.js';
 
 const chatroomSchema_test_6 = new mongoose.Schema({
   name: String,
