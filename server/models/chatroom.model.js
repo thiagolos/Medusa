@@ -1,5 +1,5 @@
-import mongoose from './index.js';
-// import mongoose from 'mongoose';
+// import mongoose from './index.js';
+import mongoose from 'mongoose';
 
 
 const chatroomSchema_test_6 = new mongoose.Schema({
