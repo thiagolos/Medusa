@@ -1,4 +1,6 @@
 import mongoose from './index.js';
+// import mongoose from 'mongoose';
+
 
 const chatroomSchema_test_6 = new mongoose.Schema({
   name: String,
@@ -8,9 +10,9 @@ const chatroomSchema_test_6 = new mongoose.Schema({
 
 const Chatroom = mongoose.model('Chatroom', chatroomSchema_test_6);
 
-const postOne = async (room) => {
+const postOne = async (roomName) => {
   try {
-    const response = await Chatroom.create(room);
+    const response = await Chatroom.create(roomName);
     return response;
   } catch (err) {
     console.log("Unable to create database entry::",err);
