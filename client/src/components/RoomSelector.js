@@ -4,14 +4,17 @@ import ChatList from "./ChatList"
 
 function RoomSelector() {
 
-  const {setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible, handleBackgroundColor} = useContext(ChatContext) 
+  const { setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible, handleBackgroundColor} = useContext(ChatContext)
+  const [formInput, setFormInput] = useState('')
 
-  const handleJoinRoom = () => {
+  const handleJoinRoom = (e) => {
+    e.preventDefault();
     setSelectorVisible(false);
     setSelectorClosed(true)
     handleBackgroundColor()
     joinRoom();
- ;
+    setFormInput('');
+
   };
 
   const handleToggleSelector = () => {
@@ -23,16 +26,32 @@ function RoomSelector() {
     <>
       {isSelectorVisible && !isSelectorClosed && (
         <div className="RoomSelector">
-          
-            <div>Hello, again!<br></br>Is there anything specific, you feel like talking about today?</div>
-            <div className="SelectorInputAndButton">
 
-              <input className="SelectorInput" type="text" placeholder="e.g. Japanese Food, Barbie, ..." onChange={(event)=>{
-                setRoom(event.target.value);
-              }}>
+            <div>Hello, again!<br></br>Is there anything specific, you feel like talking about today?</div>
+            <form
+              onSubmit={handleJoinRoom}
+              className="SelectorInputAndButton"
+              name="SelectorInputAndButton"
+
+            >
+
+              <input
+                className="SelectorInput"
+                name="SelectorInput"
+                type="text"
+                placeholder="e.g. Japanese Food, Barbie, ..."
+                onChange={(event)=>{
+                  setFormInput(event.target.value);
+                  setRoom(event.target.value);
+                }}
+                autoComplete="off"
+              >
               </input>
-              <button className="JoinButton" onClick={handleJoinRoom} >Join</button>
-            </div>
+              <button
+                className="JoinButton"
+              >
+              Join</button>
+            </form>
             <div>Otherwise, feel free to inspire yourself among friends.</div>
         </div>
       )}

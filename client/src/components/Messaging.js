@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef, useId } from "react";
 import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
@@ -7,7 +7,7 @@ function Chat({room, socket}) {
   const {setMessage, messageList, sendMessage, message} = useContext(MessageContext);
   const {leaveRoom, handleBackgroundColor} = useContext(ChatContext);
 
-  // MESSAGE FUNCTIONALITY 
+  // MESSAGE FUNCTIONALITY
 
   const handleSendMessage = (e) => {
     sendMessage(room);
@@ -15,13 +15,13 @@ function Chat({room, socket}) {
     const input = parentNode.querySelector('input');
     input.value = '';
   };
-  
+
   const handleLeaveRoom = () => {
     handleBackgroundColor()
     leaveRoom(room);
   };
 
-  // COLORS 
+  // COLORS
 
   const [colorMap, setColorMap] = useState({});
   const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
@@ -57,7 +57,7 @@ function Chat({room, socket}) {
     return color;
   }
 
-   // POSITIONING 
+   // POSITIONING
 
   function calculateLeft() {
     const value = `${Math.floor(Math.random() * (window.innerWidth - 300))}px`;
@@ -130,8 +130,8 @@ function Chat({room, socket}) {
             <div className="MessageWrapper">
             {messageList
               .filter((messageContent) => messageContent.room === room)
-              .map((messageContent) => (
-                <div className={`Message ${messageContent.sender}`}>
+              .map((messageContent, i) => (
+                <div key={i} className={`Message ${messageContent.sender}`}>
 
                   <div className="User_Time" style={{ color: getColor(messageContent.socketId) }}>
                     {messageContent.sender === "me" ? "You" : `User ${messageContent.socketId.substring(0, 5)}`}, {messageContent.time}
@@ -155,8 +155,8 @@ function Chat({room, socket}) {
                     <button class="SendButton" onClick={handleSendMessage}>Send</button>
                   </div>
                 </div>
-               
-          
+
+
           </div>
 
       </div>
