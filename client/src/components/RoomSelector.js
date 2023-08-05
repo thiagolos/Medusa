@@ -14,7 +14,6 @@ function RoomSelector() {
     handleBackgroundColor()
     joinRoom();
     setFormInput('');
-
   };
 
   const handleToggleSelector = () => {
@@ -27,7 +26,7 @@ function RoomSelector() {
       {isSelectorVisible && !isSelectorClosed && (
         <div className="RoomSelector">
 
-            <div>Hello, again!<br></br>Is there anything specific, you feel like talking about today?</div>
+            <div>Hello, again!<br/>Is there anything specific, you feel like talking about today?</div>
             <form
               onSubmit={handleJoinRoom}
               className="SelectorInputAndButton"
@@ -40,6 +39,7 @@ function RoomSelector() {
                 name="SelectorInput"
                 type="text"
                 placeholder="e.g. Japanese Food, Barbie, ..."
+                value={formInput}
                 onChange={(event)=>{
                   setFormInput(event.target.value);
                   setRoom(event.target.value);

@@ -6,10 +6,11 @@ function ChatList() {
 
   const { roomLists, socket} = useContext(ChatContext);
 
-  const index = roomLists.findIndex((list) => list.socketId === socket.id);
+  // console.log(roomLists); // NOTE roomLists is array of users
+  const index = roomLists.findIndex((user) => user.socketId === socket.id);
 
   if (index === -1) {
-    return 
+    return
   }
 
   return (

@@ -15,9 +15,11 @@ export function socketEmit(eventName, ...args) {
 }
 
 export function getAll () {
-  return fetch('http://localhost:3001/chatrooms')
-  .then((res) => res.json())
-  .catch((err) => console.error(err));
+  const response = fetch('http://localhost:3001/chatrooms')
+    .then((res) => res.json())
+    .catch((err) => console.error(err));
+  console.log(response);
+  return response;
 }
 
 export default socket;
