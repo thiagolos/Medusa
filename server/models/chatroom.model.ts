@@ -1,6 +1,5 @@
-// import mongoose from './index.js';
-import mongoose from 'mongoose';
-
+import mongoose from './index';
+// import mongoose from 'mongoose';
 
 const chatroomSchema_test_6 = new mongoose.Schema({
   name: String,
@@ -10,7 +9,7 @@ const chatroomSchema_test_6 = new mongoose.Schema({
 
 const Chatroom = mongoose.model('Chatroom', chatroomSchema_test_6);
 
-const postOne = async (roomName) => {
+const postOne = async (roomName:string) => {
   try {
     const response = await Chatroom.create(roomName);
     return response;
@@ -28,7 +27,7 @@ const getAll = async () => {
   }
 }
 
-const getMany = async (user) => {
+const getMany = async (user:any) => {
   try {
     const response = await Chatroom.find({usernames: user});
     return response;
@@ -37,7 +36,7 @@ const getMany = async (user) => {
   }
 }
 
-const getOne = async (roomName) => {
+const getOne = async (roomName:string) => {
   try {
     const response = await Chatroom.findOne({name: roomName});
     return response;
@@ -46,7 +45,7 @@ const getOne = async (roomName) => {
   }
 }
 
-const addOrUpdate = async (roomName) => {
+const addOrUpdate = async (roomName:string) => {
   try {
     const chatroom = new Chatroom({name: roomName});
     await chatroom.save();
@@ -55,7 +54,7 @@ const addOrUpdate = async (roomName) => {
   }
 }
 
-const removeOne = async (roomId) => {
+const removeOne = async (roomId:string) => {
   try {
     const response = await Chatroom.deleteOne({_id: roomId})
   } catch (err) {

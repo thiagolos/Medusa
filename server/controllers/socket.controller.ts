@@ -1,5 +1,5 @@
-import dbModels from "../models/chatroom.model.js";
-import { io } from "../index.js";
+import dbModels from "../models/chatroom.model";
+import { io } from "../index";
 
 const socketInit = function (socket) {
 
