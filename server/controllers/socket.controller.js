@@ -4,7 +4,6 @@ import { io } from "../index.js";
 const socketInit = function (socket) {
 
   socket.on("send_message", (data) => {
-    console.log(util.inspect(data, {showHidden: false, depth: null, colors: true}))
     socket.to(data.room).emit("receive_message", data)
   });
 

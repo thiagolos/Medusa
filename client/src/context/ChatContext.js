@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { socket, addSocketListener, getAll, removeSocketListener, setRoomListsOnConnect, socketEmit } from "../apiService.js";
+import { socket, addSocketListener, getAll, removeSocketListener, setRoomListsOnConnect, socketEmit } from "../apiService";
 
 const ChatContext = createContext();
 
