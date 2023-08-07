@@ -1,7 +1,7 @@
 import Chat from "./Messaging";
 import { ChatContext } from "../context/ChatContext";
 import { useContext } from "react";
-import type { RoomData, User } from '../Types';
+import { RoomData, User } from '../Types';
 
 function ChatList() {
 

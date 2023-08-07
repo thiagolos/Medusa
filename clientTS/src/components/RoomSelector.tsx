@@ -1,18 +1,17 @@
-import { useContext, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { ChatContext } from "../context/ChatContext";
-import ChatList from "./ChatList"
 
 function RoomSelector() {
 
-  const { setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible, handleBackgroundColor} = useContext(ChatContext)
+  const { room, setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible, handleBackgroundColor} = useContext(ChatContext)
   const [formInput, setFormInput] = useState('')
 
-  const handleJoinRoom = (e) => {
+  const handleJoinRoom = (e: FormEvent) => {
     e.preventDefault();
     setSelectorVisible(false);
     setSelectorClosed(true)
     handleBackgroundColor()
-    joinRoom();
+    joinRoom(room);
     setFormInput('');
   };
 

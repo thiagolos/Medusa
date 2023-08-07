@@ -4,7 +4,7 @@ import { ClientToServerEvents, ServerToClientEvents } from "./Types";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:3001");
 
-export function addSocketListener<Event extends keyof ServerToClientEvents>(event: Event, arg) {
+export function addSocketListener<Event extends keyof ServerToClientEvents>(event: Event, arg: any) {
   socket.on(event, arg);
 }
 

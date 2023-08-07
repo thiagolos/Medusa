@@ -58,7 +58,7 @@ export interface ChatContext {
   socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   userCount: number;
   setUserCount: React.Dispatch<React.SetStateAction<number>>;
-  joinRoom: (roomData: RoomData) => void;
+  joinRoom: (roomName: string) => void;
   leaveRoom: (roomName: string) => void;
   roomLists: User[];
   setRoomLists: React.Dispatch<React.SetStateAction<User[]>>;
