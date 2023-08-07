@@ -1,9 +1,9 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { socket, addSocketListener, getAll, removeSocketListener, socketEmit } from "../apiService";
 import type { User, Room, Chatroom, Position } from "../Types/Chat";
-import type { UserData } from "../Types";
+import type { ChatContext, RoomData, UserData } from "../Types";
 
-let initContext: null | any = null
+let initContext: {} | ChatContext = {};
 
 const ChatContext = createContext(initContext);
 
@@ -54,7 +54,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
 
   const joinRoom = () => {
     if(room !== "") {
-      const userAlreadyInRoom = roomLists.some((list: User) => list.rooms.some((r) => r.name === room))
+      const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r: RoomData) => r.name === room))
       if (userAlreadyInRoom) {
         console.log("You are already in this room")
         return

@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 export interface ClientToServerEvents {
   update_chatrooms: (database: Chatroom[]) => void;
   send_message: (messageData: MessageData) => void;
@@ -22,7 +23,7 @@ export interface Room {
 }
 export interface User {
   socketId: string;
-  rooms: string[];
+  rooms: RoomData[];
 }
 export interface Chatroom {
   _id?: string;
@@ -47,18 +48,27 @@ export interface Position {
   left: number;
 }
 export interface ChatContext {
-  roomData: {
-    name: string;
-    time: string;
-    creator: string;
-  };
+  roomData: RoomData;
   room: string;
   setRoom: React.Dispatch<React.SetStateAction<string>>;
   chatrooms: Chatroom[];
   setChatrooms: React.Dispatch<React.SetStateAction<Chatroom[]>>;
   getAll: () => Promise<any>;
-  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   userCount: number;
   setUserCount: React.Dispatch<React.SetStateAction<number>>;
-
+  joinRoom: (roomData: RoomData) => void;
+  leaveRoom: (roomName: string) => void;
+  roomLists: User[];
+  setRoomLists: React.Dispatch<React.SetStateAction<User[]>>;
+  positions: Position[];
+  setPositions: React.Dispatch<React.SetStateAction<Position[]>>;
+  setSelectorClosed: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectorVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isSelectorClosed: boolean;
+  isSelectorVisible: boolean;
+  colors: string[];
+  bgColor: string;
+  setBgColor: React.Dispatch<React.SetStateAction<string>>;
+  handleBackgroundColor: () => void;
 }
