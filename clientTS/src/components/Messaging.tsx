@@ -1,30 +1,35 @@
-import { useContext, useEffect, useState, useRef, useId } from "react";
+import { useContext, useEffect, useState, useRef, MouseEvent } from "react";
 import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
-function Chat({room, socket}) {
+function Chat() {
 
-  const {setMessage, messageList, sendMessage, message} = useContext(MessageContext);
-  const {leaveRoom, handleBackgroundColor} = useContext(ChatContext);
+  const {setMessage, messageList, sendMessage } = useContext(MessageContext);
+  const {leaveRoom, handleBackgroundColor, socket, room } = useContext(ChatContext);
 
+  const roomName = room;
   // MESSAGE FUNCTIONALITY
 
-  const handleSendMessage = (e) => {
-    sendMessage(room);
-    const parentNode = e.target.parentNode;
-    const input = parentNode.querySelector('input');
-    input.value = '';
+  const handleSendMessage = (e: MouseEvent) => {
+    sendMessage(roomName);
+    const parentNode = (e.target as Element).parentNode;
+    const input = parentNode!.querySelector('input');
+    input!.value = '';
   };
 
   const handleLeaveRoom = () => {
     handleBackgroundColor()
-    leaveRoom(room);
+    leaveRoom(roomName);
   };
 
   // COLORS
+  interface ColorMap {
+    [k: string]: string;
+  }
 
-  const [colorMap, setColorMap] = useState({});
+  const [colorMap, setColorMap] = useState({} as ColorMap);
   const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
+
 
   useEffect(() => {
     setColorMap((prevColorMap) => {
@@ -35,8 +40,8 @@ function Chat({room, socket}) {
     });
   }, [socket.id, color]);
 
-  function getColor(sender) {
-    if (!colorMap[sender]) {
+  function getColor(sender: string) {
+    if (colorMap[sender]) {
       // Generate a random color for new users
       setColorMap((prevColorMap) => {
         return {
@@ -80,7 +85,7 @@ function Chat({room, socket}) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
-  function handleMouseDown(event) {
+  function handleMouseDown(event: MouseEvent) {
     setIsDragging(true);
     setDragOffset({
       x: event.clientX - parseInt(position.left),
@@ -88,7 +93,7 @@ function Chat({room, socket}) {
     });
   }
 
-  function handleMouseMove(event) {
+  function handleMouseMove(event: MouseEvent) {
     if (isDragging) {
       setPosition({
         left: event.clientX - dragOffset.x + "px",
@@ -100,7 +105,7 @@ function Chat({room, socket}) {
   function handleMouseUp() {
     setIsDragging(false);
   }
-  const messagesEndRef = useRef(null)
+  const messagesEndRef = useRef<null | HTMLDivElement>(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({behavior: 'smooth'})
@@ -118,9 +123,9 @@ function Chat({room, socket}) {
         onMouseUp={handleMouseUp}>
 
           <div className="ChatBar">
-            <div className="Room">{room}</div>
-            <button class="LeaveButton" onClick={handleLeaveRoom}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+            <div className="Room">{roomName}</div>
+            <button className="LeaveButton" onClick={handleLeaveRoom}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
               </svg>
             </button>
@@ -129,7 +134,7 @@ function Chat({room, socket}) {
           <div className="ChatWindow" >
             <div className="MessageWrapper">
             {messageList
-              .filter((messageContent) => messageContent.room === room)
+              .filter((messageContent) => messageContent.room === roomName)
               .map((messageContent, i) => (
                 <div key={i} className={`Message ${messageContent.sender}`}>
 
@@ -152,7 +157,7 @@ function Chat({room, socket}) {
                         setMessage(event.target.value);
                       }}>
                     </input>
-                    <button class="SendButton" onClick={handleSendMessage}>Send</button>
+                    <button className="SendButton" onClick={handleSendMessage}>Send</button>
                   </div>
                 </div>
 
