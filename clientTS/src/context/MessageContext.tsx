@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
 import { useContext } from "react";
 import { socketEmit, socket, addSocketListener, removeSocketListener } from "../apiService";
-// import type { User } from '../Types/Chat';
+import type { User } from '../Types/Chat';
 
 const MessageContext = createContext(null);
 
@@ -18,9 +18,9 @@ function MessageProvider ({ children }) {
 
   // MESSAGE FUNCTIONALITY
 
-  function handleRoomButtonClick(roomName) {
+  function handleRoomButtonClick(roomName: string) {
 
-    const existingRoom = roomLists.some((list) =>
+    const existingRoom = roomLists.some((list: User) =>
         list.rooms.some((str) => str === roomName) // FIXME pre: list.rooms.some((str) => str.name === roomName)
       );
       if (existingRoom) {
@@ -37,8 +37,8 @@ function MessageProvider ({ children }) {
     console.log("Room Data from RoomList:", roomData);
     socketEmit("join_room", roomData)
 
-    setRoomLists((prevRoomLists) => {
-      const index = prevRoomLists.findIndex((list) => list.socketId === socket.id);
+    setRoomLists((prevRoomLists: User[]) => {
+      const index = prevRoomLists.findIndex((list: User) => list.socketId === socket.id);
       const updatedRooms = [
         ...prevRoomLists[index].rooms,
         { name: roomName, time: roomData.time },
@@ -90,11 +90,11 @@ function MessageProvider ({ children }) {
       console.log('messageList', messageList)
     });
 
-    addSocketListener('joined_empty_room', (data) => {
+    addSocketListener('joined_empty_room', (roomName) => {
       console.log('joined_empty_room:', socket.id);
       const messageData = {
         user: socket.id,
-        room: data.room,
+        room: roomName,
         message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
         time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
         sender: "me",

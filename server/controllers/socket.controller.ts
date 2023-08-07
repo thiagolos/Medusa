@@ -17,10 +17,10 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
   socket.on("join_room", async (roomData) => {
     const chatroom = await dbModels.getOne(roomData.name);
     console.log("ROOM DATA::",roomData);
-    
+
     if (chatroom) {
       socket.join(chatroom.name!);
-      chatroom.users += 1; 
+      chatroom.users += 1;
       chatroom.usernames.push(socket.id)
       await chatroom.save();
 
@@ -42,7 +42,7 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
   socket.on("leave_room", async (roomName) => {
     socket.leave(roomName);
     const chatroom = await dbModels.getOne(roomName);
-
+    console.log(`thisss=> ${chatroom}`);
     if (chatroom) {
       chatroom.users -= 1;
       chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
@@ -70,14 +70,14 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
         chatroom.users -= 1;
         chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
         await chatroom.save();
-  
+
         io.to(chatroom.name!).emit("user_geht", {
           room: chatroom.name,
           username: socket.id,
           userCount: chatroom.users,
           usernames: chatroom.usernames,
         });
-  
+
         if (chatroom.users === 0) {
           await dbModels.removeOne(chatroom._id);
           io.emit("update_chatrooms", await dbModels.getAll());
