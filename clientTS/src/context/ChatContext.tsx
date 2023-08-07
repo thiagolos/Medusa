@@ -1,11 +1,11 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { socket, addSocketListener, getAll, removeSocketListener, socketEmit } from "../apiService";
-import type { User, Room, Chatroom, Position } from "../Types/Chat";
+import { User, Room, Chatroom, Position, ChatContext, ChatContext } from "../Types";
 import type { ChatContext, RoomData, UserData } from "../Types";
 
-let initContext: {} | ChatContext = {};
 
-const ChatContext = createContext(initContext);
+
+const ChatContext = createContext<ChatContext>({} as ChatContext);
 
 type ChatProviderProps = {
   children: ReactNode

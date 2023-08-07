@@ -1,13 +1,12 @@
 import Chat from "./Messaging";
 import { ChatContext } from "../context/ChatContext";
 import { useContext } from "react";
-import type { User } from '../Types/Chat';
+import type { RoomData, User } from '../Types';
 
 function ChatList() {
 
-  const { roomLists, socket} = useContext(ChatContext);
+  const { roomLists, socket } = useContext(ChatContext);
 
-  // console.log(roomLists); // NOTE roomLists is array of users
   const index = roomLists.findIndex((user: User) => user.socketId === socket.id);
 
   if (index === -1) {
@@ -17,7 +16,7 @@ function ChatList() {
   return (
     <>
         <div>
-              {roomLists[index].rooms.map((room) => (
+              {roomLists[index].rooms.map((room: RoomData) => (
                 <div className="ChatList" key={room.name}>
                   <Chat room={room.name} socket={socket}></Chat>
                 </div>

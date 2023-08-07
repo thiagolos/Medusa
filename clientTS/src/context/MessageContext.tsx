@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
 import { useContext } from "react";
 import { socketEmit, socket, addSocketListener, removeSocketListener } from "../apiService";
-import type { User } from '../Types/Chat';
+import type { User } from '../Types';
 
 const MessageContext = createContext(null);
 
