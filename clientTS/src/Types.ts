@@ -42,6 +42,7 @@ export interface MessageData {
   room: string;
   message: string;
   time: string;
+  sender?: string;
   socketId: string;
 }
 export interface Position {
@@ -58,7 +59,7 @@ export interface ChatContext {
   socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   userCount: number;
   setUserCount: React.Dispatch<React.SetStateAction<number>>;
-  joinRoom: (roomData: RoomData) => void;
+  joinRoom: (roomName: string) => void;
   leaveRoom: (roomName: string) => void;
   roomLists: User[];
   setRoomLists: React.Dispatch<React.SetStateAction<User[]>>;
@@ -72,4 +73,13 @@ export interface ChatContext {
   bgColor: string;
   setBgColor: React.Dispatch<React.SetStateAction<string>>;
   handleBackgroundColor: () => void;
+}
+
+export interface MessageContext {
+  message: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
+  messageList: MessageData[];
+  setMessageList: React.Dispatch<React.SetStateAction<MessageData[]>>;
+  sendMessage: (roomName: string) => Promise<void>;
+  handleRoomButtonClick: (roomName: string) => void
 }
