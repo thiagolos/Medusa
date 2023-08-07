@@ -1,8 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { socket, addSocketListener, getAll, removeSocketListener, socketEmit } from "../apiService";
-import { ChatContext, Room, RoomData, User, Chatroom, Position } from "../Types";
-
-
+import type { ChatContext, Room, RoomData, User, Chatroom, Position } from "../Types";
 
 const ChatContext = createContext<ChatContext>({} as ChatContext);
 

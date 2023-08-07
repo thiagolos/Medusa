@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useEffect, useState, useContext } from "react";
 import { socketEmit, socket, addSocketListener, removeSocketListener } from "../apiService";
-import { MessageContext, User, MessageData } from '../Types';
+import type { MessageContext, User, MessageData } from '../Types';
 import { ChatContext } from "./ChatContext";
 
 const MessageContext = createContext<MessageContext>({} as MessageContext);
