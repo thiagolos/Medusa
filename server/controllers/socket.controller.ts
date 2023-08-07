@@ -1,27 +1,28 @@
 import dbModels from "../models/chatroom.model";
-import { ClientToServerEvents, ServerToClientEvents } from '../Types';
+import { ClientToServerEvents, ServerToClientEvents } from "../Types";
 import { Socket } from "socket.io";
 import { io } from "../index";
 
-const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServerEvents>) {
-
+const socketInit = function (
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>,
+) {
   socket.on("send_message", (messageData) => {
-    socket.to(messageData.room).emit("receive_message", messageData)
+    socket.to(messageData.room).emit("receive_message", messageData);
   });
 
-  socket.on("create_room", async(roomName) => {
+  socket.on("create_room", async (roomName) => {
     dbModels.addOrUpdate(roomName);
-    io.emit("update_chatrooms", await dbModels.getAll())
-  })
+    io.emit("update_chatrooms", await dbModels.getAll());
+  });
 
   socket.on("join_room", async (roomData) => {
     const chatroom = await dbModels.getOne(roomData.name);
-    console.log("ROOM DATA::",roomData);
+    console.log("ROOM DATA::", roomData);
 
     if (chatroom) {
       socket.join(chatroom.name!);
       chatroom.users += 1;
-      chatroom.usernames.push(socket.id)
+      chatroom.usernames.push(socket.id);
       await chatroom.save();
 
       io.emit("user_join", {
@@ -33,11 +34,11 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
 
       if (chatroom.users <= 1) {
         if (chatroom.name) {
-          socket.emit('joined_empty_room', chatroom.name);
+          socket.emit("joined_empty_room", chatroom.name);
         }
       }
     }
-  })
+  });
 
   socket.on("leave_room", async (roomName) => {
     socket.leave(roomName);
@@ -45,7 +46,9 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
     console.log(`thisss=> ${chatroom}`);
     if (chatroom) {
       chatroom.users -= 1;
-      chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
+      chatroom.usernames = chatroom.usernames.filter(
+        (username) => username !== socket.id,
+      );
       await chatroom.save();
 
       io.emit("user_leaves", {
@@ -56,7 +59,7 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
       });
 
       if (chatroom.users === 0) {
-        await dbModels.removeOne(chatroom._id);
+        await dbModels.removeOne(chatroom._id.toString());
         io.emit("update_chatrooms", await dbModels.getAll());
       }
     }
@@ -68,7 +71,9 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
     if (chatrooms) {
       for (const chatroom of chatrooms) {
         chatroom.users -= 1;
-        chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
+        chatroom.usernames = chatroom.usernames.filter(
+          (username) => username !== socket.id,
+        );
         await chatroom.save();
 
         io.to(chatroom.name!).emit("user_geht", {
@@ -79,7 +84,7 @@ const socketInit = function (socket: Socket<ServerToClientEvents, ClientToServer
         });
 
         if (chatroom.users === 0) {
-          await dbModels.removeOne(chatroom._id);
+          await dbModels.removeOne(chatroom._id.toString());
           io.emit("update_chatrooms", await dbModels.getAll());
         }
       }

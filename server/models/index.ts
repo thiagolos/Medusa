@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const uri = 'mongodb://127.0.0.1:27017/chatapp_test_6';
+const uri = "mongodb://127.0.0.1:27017/chatapp_test_6";
 
 mongoose.connect(uri);
 

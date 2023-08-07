@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 
 export interface ClientToServerEvents {
   receive_message: (messageData: MessageData) => void;
@@ -11,16 +12,16 @@ export interface ServerToClientEvents {
   create_room: (roomName: string) => void;
   leave_room: (roomName: string) => void;
   disconnect: () => void;
-  user_geht: (room:Room) => void;
+  user_geht: (room: Room) => void;
   user_join: (room: Room) => void;
-  user_leaves: (room:Room) => void;
+  user_leaves: (room: Room) => void;
 }
 
 export interface Room {
-  room?: string,
-  username: string,
-  userCount: number,
-  usernames: string[]
+  room?: string;
+  username: string;
+  userCount: number;
+  usernames: string[];
 }
 
 export interface User {
@@ -29,7 +30,7 @@ export interface User {
 }
 
 export interface Chatroom {
-  _id?: string;
+  _id?: ObjectId;
   name: string;
   users: number;
   usernames: string[];
