@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { socket, addSocketListener, getAll, removeSocketListener, socketEmit } from "../apiService";
-import { User, Room, Chatroom, Position, ChatContext, ChatContext } from "../Types";
-import type { ChatContext, RoomData, UserData } from "../Types";
+import { ChatContext, Room, RoomData, User, Chatroom, Position } from "../Types";
 
 
 
@@ -54,7 +53,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
 
   const joinRoom = () => {
     if(room !== "") {
-      const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r: RoomData) => r.name === room))
+      const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === room))
       if (userAlreadyInRoom) {
         console.log("You are already in this room")
         return
@@ -67,7 +66,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
           const index = prevRoomLists.findIndex(
             (list: User) => list.socketId === socket.id
             );
-            const updatedRooms: Room[] = [
+            const updatedRooms: RoomData[] = [
               ...prevRoomLists[index].rooms,
               { name: room, time: roomData.time },
             ];
@@ -153,7 +152,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
   // USER JOINget
 
   useEffect(() => {
-    addSocketListener("user_join", (userData: UserData) => {
+    addSocketListener("user_join", (userData: Room) => {
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {
@@ -177,7 +176,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
   // USER LEAVE
 
   useEffect(() => {
-    addSocketListener("user_leaves", (userData: UserData) => {
+    addSocketListener("user_leaves", (userData: Room) => {
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {

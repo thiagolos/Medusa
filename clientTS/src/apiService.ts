@@ -12,7 +12,7 @@ export function removeSocketListener<Event extends keyof ServerToClientEvents>(e
   socket.off(event);
 }
 
-export function socketEmit<Event extends keyof ClientToServerEvents>(eventName: Event, args: Parameters<ClientToServerEvents[Event]>) {
+export function socketEmit<Event extends keyof ClientToServerEvents>(eventName: Event, ...args: Parameters<ClientToServerEvents[Event]>) {
   socket.emit(eventName, ...args);
 }
 
