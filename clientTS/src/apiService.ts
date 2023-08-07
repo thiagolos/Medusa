@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import { ClientToServerEvents, ServerToClientEvents } from "./Types/SocketIo";
+import { ClientToServerEvents, ServerToClientEvents } from "./Types";
 // import type { ServerToClientEvents, ClientToServerEvents } from './Types/SocketIo';
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:3001");

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { socket, addSocketListener, getAll, removeSocketListener, socketEmit } from "../apiService";
 import type { User, Room, Chatroom, Position } from "../Types/Chat";
-import type { UserData } from "../Types/SocketIo";
+import type { UserData } from "../Types";
 
 let initContext: null | any = null
 

@@ -42,3 +42,23 @@ export interface MessageData {
   time: string;
   socketId: string;
 }
+export interface Position {
+  top: number;
+  left: number;
+}
+export interface ChatContext {
+  roomData: {
+    name: string;
+    time: string;
+    creator: string;
+  };
+  room: string;
+  setRoom: React.Dispatch<React.SetStateAction<string>>;
+  chatrooms: Chatroom[];
+  setChatrooms: React.Dispatch<React.SetStateAction<Chatroom[]>>;
+  getAll: () => Promise<any>;
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  userCount: number;
+  setUserCount: React.Dispatch<React.SetStateAction<number>>;
+
+}
