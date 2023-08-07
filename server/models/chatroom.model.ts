@@ -1,5 +1,6 @@
 import mongoose from './index';
 // import mongoose from 'mongoose';
+import { Chatroom } from '../Types';
 
 const chatroomSchema_test_6 = new mongoose.Schema({
   name: String,
@@ -20,14 +21,15 @@ const postOne = async (roomName:string) => {
 
 const getAll = async () => {
   try {
-    const response = await Chatroom.find({});
+    const response = await Chatroom.find({}) as Chatroom[];
     return response;
   } catch (err) {
     console.log("Unable to get entries from database::",err);
+    return [];
   }
 }
 
-const getMany = async (user:any) => {
+const getMany = async (user:string) => {
   try {
     const response = await Chatroom.find({usernames: user});
     return response;
@@ -54,7 +56,7 @@ const addOrUpdate = async (roomName:string) => {
   }
 }
 
-const removeOne = async (roomId:string) => {
+const removeOne = async (roomId:any) => {
   try {
     const response = await Chatroom.deleteOne({_id: roomId})
   } catch (err) {
