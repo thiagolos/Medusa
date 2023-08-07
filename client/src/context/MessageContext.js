@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
 import { useContext } from "react";
 import { socketEmit, socket, addSocketListener, removeSocketListener } from "../apiService";
-import type { User } from '../Types/Chat';
+// import type { User } from '../Types/Chat';
 
 const MessageContext = createContext(null);
 
@@ -18,9 +18,9 @@ function MessageProvider ({ children }) {
 
   // MESSAGE FUNCTIONALITY
 
-  function handleRoomButtonClick(roomName: string) {
+  function handleRoomButtonClick(roomName) {
 
-    const existingRoom = roomLists.some((list: User) =>
+    const existingRoom = roomLists.some((list) =>
         list.rooms.some((str) => str === roomName) // FIXME pre: list.rooms.some((str) => str.name === roomName)
       );
       if (existingRoom) {
@@ -37,8 +37,8 @@ function MessageProvider ({ children }) {
     console.log("Room Data from RoomList:", roomData);
     socketEmit("join_room", roomData)
 
-    setRoomLists((prevRoomLists: User[]) => {
-      const index = prevRoomLists.findIndex((list: User) => list.socketId === socket.id);
+    setRoomLists((prevRoomLists) => {
+      const index = prevRoomLists.findIndex((list) => list.socketId === socket.id);
       const updatedRooms = [
         ...prevRoomLists[index].rooms,
         { name: roomName, time: roomData.time },

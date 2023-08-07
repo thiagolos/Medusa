@@ -90,11 +90,11 @@ function MessageProvider ({ children }) {
       console.log('messageList', messageList)
     });
 
-    addSocketListener('joined_empty_room', (data) => {
+    addSocketListener('joined_empty_room', (roomName) => {
       console.log('joined_empty_room:', socket.id);
       const messageData = {
         user: socket.id,
-        room: data.room,
+        room: roomName,
         message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
         time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
         sender: "me",

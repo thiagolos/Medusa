@@ -14,7 +14,7 @@ function ChatProvider ({ children }) {
   const [userCount, setUserCount] = useState(0);
   const [roomLists, setRoomLists] = useState([]);
 
-  const colors = ['rgb(210, 185, 31)', 'rgb(37,73,155)', 'rgb(130,125,188', 'rgb(244,90,51)', 'rgb(217,117,117)'];
+  const colors = ['rgb(210, 185, 31)', 'rgb(37,73,155)', 'rgb(130,125,188)', 'rgb(244,90,51)', 'rgb(217,117,117)'];
   const [bgColor, setBgColor] = useState(colors[0]);
 
   function handleBackgroundColor() {
@@ -51,6 +51,9 @@ function ChatProvider ({ children }) {
         console.log("You are already in this room")
         return
       }
+
+      console.log('chatrooms: ');
+
       const existingRoom = chatrooms.some((c) => c.name === room);
       if (existingRoom){
         socketEmit("join_room", roomData);

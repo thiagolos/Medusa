@@ -1,18 +1,19 @@
-import * as io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
+import { ClientToServerEvents, ServerToClientEvents } from "./Types/SocketIo";
 // import type { ServerToClientEvents, ClientToServerEvents } from './Types/SocketIo';
 
-export const socket = io.connect("http://localhost:3001");
+export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:3001");
 
-export function addSocketListener(event: string, arg: any) {
+export function addSocketListener<Event extends keyof ServerToClientEvents>(event: Event, arg) {
   socket.on(event, arg);
 }
 
-export function removeSocketListener(event: string) {
+export function removeSocketListener<Event extends keyof ServerToClientEvents>(event: Event) {
   socket.off(event);
 }
 
-export function socketEmit(eventName: string, arg: any) {
-  socket.emit(eventName, arg);
+export function socketEmit<Event extends keyof ClientToServerEvents>(eventName: Event, args: Parameters<ClientToServerEvents[Event]>) {
+  socket.emit(eventName, ...args);
 }
 
 export function getAll () {

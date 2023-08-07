@@ -1,19 +1,26 @@
-import { createContext, useEffect, useState } from "react";
-import { socket, addSocketListener, getAll, removeSocketListener, setRoomListsOnConnect, socketEmit } from "../apiService";
-import type { User, Room } from "../Types/Chat";
+import { ReactNode, createContext, useEffect, useState } from "react";
+import { socket, addSocketListener, getAll, removeSocketListener, socketEmit } from "../apiService";
+import type { User, Room, Chatroom, Position } from "../Types/Chat";
+import type { UserData } from "../Types/SocketIo";
 
-const ChatContext = createContext(null);
+let initContext: null | any = null
 
-function ChatProvider ({ children }) {
+const ChatContext = createContext(initContext);
+
+type ChatProviderProps = {
+  children: ReactNode
+}
+
+function ChatProvider ({ children }: ChatProviderProps) {
 
 
   // DEFINTIONS
 
   // ROOOMS
-  const [room, setRoom] = useState("");
-  const [chatrooms, setChatrooms] = useState([]);
+  const [room, setRoom] = useState<string>("");
+  const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
   const [userCount, setUserCount] = useState(0);
-  const [roomLists, setRoomLists] = useState([]);
+  const [roomLists, setRoomLists] = useState<User[]>([]);
 
   const colors = ['rgb(210, 185, 31)', 'rgb(37,73,155)', 'rgb(130,125,188', 'rgb(244,90,51)', 'rgb(217,117,117)'];
   const [bgColor, setBgColor] = useState(colors[0]);
@@ -35,7 +42,7 @@ function ChatProvider ({ children }) {
   const [isSelectorClosed, setSelectorClosed] = useState(false);
 
   // POSITIONS
-  const [positions, setPositions] = useState([]);
+  const [positions, setPositions] = useState<Position[]>([]);
 
 
   // LOGIC
@@ -52,15 +59,15 @@ function ChatProvider ({ children }) {
         console.log("You are already in this room")
         return
       }
-      const existingRoom = chatrooms.some((c: Room) => c.name === room);
+      const existingRoom = chatrooms.some((c) => c.name === room);
       if (existingRoom){
         socketEmit("join_room", roomData);
 
-        setRoomLists((prevRoomLists) => {
+        setRoomLists((prevRoomLists: User[]): User[] => {
           const index = prevRoomLists.findIndex(
             (list: User) => list.socketId === socket.id
             );
-            const updatedRooms: User[] = [
+            const updatedRooms: Room[] = [
               ...prevRoomLists[index].rooms,
               { name: room, time: roomData.time },
             ];
@@ -96,7 +103,7 @@ function ChatProvider ({ children }) {
     }
   };
 
-  const leaveRoom = (room) => {
+  const leaveRoom = (room: string) => {
     socketEmit("leave_room", room);
     setRoomLists((prevRoomLists) => {
       const index = prevRoomLists.findIndex(
@@ -135,7 +142,7 @@ function ChatProvider ({ children }) {
   // UPDATE CHATRROMS
 
   useEffect(() => {
-    addSocketListener("update_chatrooms", (chatrooms) => {
+    addSocketListener("update_chatrooms", (chatrooms: Chatroom[]) => {
       setChatrooms(chatrooms);
     });
     return () => {
@@ -146,7 +153,7 @@ function ChatProvider ({ children }) {
   // USER JOINget
 
   useEffect(() => {
-    addSocketListener("user_join", (userData) => {
+    addSocketListener("user_join", (userData: UserData) => {
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {
@@ -170,7 +177,7 @@ function ChatProvider ({ children }) {
   // USER LEAVE
 
   useEffect(() => {
-    addSocketListener("user_leaves", (userData) => {
+    addSocketListener("user_leaves", (userData: UserData) => {
       const updatedChatrooms = chatrooms.map((chatroom) => {
         if (chatroom.name === userData.room) {
           return {
