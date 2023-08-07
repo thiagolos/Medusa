@@ -18,7 +18,7 @@ function ChatList() {
         <div>
               {roomLists[index].rooms.map((room: RoomData) => (
                 <div className="ChatList" key={room.name}>
-                  <Chat room={room.name} socket={socket}></Chat>
+                  <Chat />
                 </div>
               ))}
         </div>
