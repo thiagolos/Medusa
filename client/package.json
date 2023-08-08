@@ -1,35 +1,13 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "clientts",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^29.5.3",
-    "@types/node": "^20.4.8",
-    "@types/react": "^18.2.18",
-    "@types/react-dom": "^18.2.7",
-    "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-fast-marquee": "^1.6.0",
-    "react-scripts": "5.0.1",
-    "socket.io-client": "^4.7.1",
-    "web-vitals": "^2.1.4"
-  },
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "c": "cypress open"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "browserslist": {
     "production": [
@@ -43,11 +21,25 @@
       "last 1 safari version"
     ]
   },
+  "dependencies": {
+    "browserslist": "^4.21.10",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-fast-marquee": "^1.6.0",
+    "socket.io-client": "^4.7.2",
+    "web-vitals": "^3.4.0"
+  },
   "devDependencies": {
-    "cypress": "^12.17.3",
-    "react-app-rewired": "^2.2.1",
-    "source-map-loader": "^4.0.1",
-    "ts-loader": "^9.4.4",
-    "typescript": "^5.1.6"
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }

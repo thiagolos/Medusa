@@ -1,27 +1,30 @@
-import { createContext, useEffect, useState } from "react";
-import { ChatContext } from "./ChatContext";
-import { useContext } from "react";
+import { ReactNode, createContext, useEffect, useState, useContext } from "react";
 import { socketEmit, socket, addSocketListener, removeSocketListener } from "../apiService";
-// import type { User } from '../Types/Chat';
+import type { MessageContext, User, MessageData } from '../Types';
+import { ChatContext } from "./ChatContext";
 
-const MessageContext = createContext(null);
+const MessageContext = createContext<MessageContext>({} as MessageContext);
 
-function MessageProvider ({ children }) {
+type ChatProviderProps = {
+  children: ReactNode
+}
+
+function MessageProvider ({ children }: ChatProviderProps) {
 
   const { setRoom, roomLists, setRoomLists } = useContext(ChatContext)
 
   // DEFINITIONS
 
-  const [message, setMessage] = useState("");
-  const [messageList, setMessageList] = useState([])
+  const [message, setMessage] = useState<string>("");
+  const [messageList, setMessageList] = useState<MessageData[]>([]);
 
 
   // MESSAGE FUNCTIONALITY
 
-  function handleRoomButtonClick(roomName) {
+  function handleRoomButtonClick(roomName: string) {
 
-    const existingRoom = roomLists.some((list) =>
-        list.rooms.some((str) => str === roomName) // FIXME pre: list.rooms.some((str) => str.name === roomName)
+    const existingRoom = roomLists.some((list: User) =>
+        list.rooms.some((r) => r.name === roomName)
       );
       if (existingRoom) {
         console.log("You are already in this room.");
@@ -37,8 +40,9 @@ function MessageProvider ({ children }) {
     console.log("Room Data from RoomList:", roomData);
     socketEmit("join_room", roomData)
 
-    setRoomLists((prevRoomLists) => {
-      const index = prevRoomLists.findIndex((list) => list.socketId === socket.id);
+    setRoomLists((prevRoomLists: User[]) => {
+      const index = prevRoomLists.findIndex((list: User) => list.socketId === socket.id);
+      
       const updatedRooms = [
         ...prevRoomLists[index].rooms,
         { name: roomName, time: roomData.time },
@@ -57,11 +61,11 @@ function MessageProvider ({ children }) {
   }
 
 
-  const sendMessage = async (room) => {
-    if (room !== "") {
+  const sendMessage = async (roomName: string) => {
+    if (roomName !== "") {
       const messageData = {
         user: socket.id,
-        room: room,
+        room: roomName,
         message: message,
         time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
         sender: "me",
@@ -80,7 +84,7 @@ function MessageProvider ({ children }) {
   // RECEIVE MESSAGE & JOIN EMPTY ROOM
 
   useEffect(() => {
-    addSocketListener("receive_message", (data) => {
+    addSocketListener("receive_message", (data: MessageData) => {
       console.log('message received', data)
       const messageData = {
         ...data,
@@ -90,11 +94,11 @@ function MessageProvider ({ children }) {
       console.log('messageList', messageList)
     });
 
-    addSocketListener('joined_empty_room', (data) => {
+    addSocketListener('joined_empty_room', (roomName: string) => {
       console.log('joined_empty_room:', socket.id);
       const messageData = {
         user: socket.id,
-        room: data.room,
+        room: roomName,
         message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
         time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
         sender: "me",
@@ -109,13 +113,6 @@ function MessageProvider ({ children }) {
     };
 
   }, []);
-
-
-  // TEST LOGS
-
-  // useEffect(() => {
-  //   console.log('messageList:', messageList);
-  // }, [messageList]);
 
   const value = {
     message,
