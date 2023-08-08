@@ -11,7 +11,7 @@ type ChatProviderProps = {
 
 function MessageProvider ({ children }: ChatProviderProps) {
 
-  const { setRoom, roomLists, setRoomLists } = useContext(ChatContext)
+  const { setRoomName , roomLists, setRoomLists } = useContext(ChatContext)
 
   // DEFINITIONS
 
@@ -31,7 +31,7 @@ function MessageProvider ({ children }: ChatProviderProps) {
         return;
     }
 
-    setRoom(roomName);
+    setRoomName(roomName);
     const roomData = {
       name: roomName,
       time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
@@ -42,7 +42,7 @@ function MessageProvider ({ children }: ChatProviderProps) {
 
     setRoomLists((prevRoomLists: User[]) => {
       const index = prevRoomLists.findIndex((list: User) => list.socketId === socket.id);
-      
+
       const updatedRooms = [
         ...prevRoomLists[index].rooms,
         { name: roomName, time: roomData.time },
