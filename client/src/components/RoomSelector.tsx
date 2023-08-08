@@ -7,14 +7,10 @@ function RoomSelector() {
   const [formInput, setFormInput] = useState('')
 
   const handleJoinRoom = (e: FormEvent) => {
-    console.log("FORM INPUT: ", formInput);
-    // console.log("FORM EVENT: ", e);
     e.preventDefault();
     setSelectorVisible(false);
     setSelectorClosed(true)
     handleBackgroundColor()
-    console.log(roomName);
-    console.log(roomName);
     joinRoom(roomName);
     setFormInput('');
   };
@@ -43,8 +39,9 @@ function RoomSelector() {
                 placeholder="e.g. Japanese Food, Barbie, ..."
                 value={formInput}
                 onChange={(event)=>{
-                  setFormInput(event.target.value);
-                  setRoomName(formInput);
+                  const value = event.target.value;
+                  setFormInput(value);
+                  setRoomName(value);
                 }}
                 autoComplete="off"
               >
