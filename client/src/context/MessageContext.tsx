@@ -27,7 +27,6 @@ function MessageProvider ({ children }: ChatProviderProps) {
         list.rooms.some((r) => r.name === roomName)
       );
       if (existingRoom) {
-        console.log("You are already in this room.");
         return;
     }
 
@@ -37,7 +36,6 @@ function MessageProvider ({ children }: ChatProviderProps) {
       time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
       creator: socket.id,
     };
-    console.log("Room Data from RoomList:", roomData);
     socketEmit("join_room", roomData)
 
     setRoomLists((prevRoomLists: User[]) => {
@@ -53,8 +51,6 @@ function MessageProvider ({ children }: ChatProviderProps) {
       };
       const updatedRoomLists = [...prevRoomLists];
       updatedRoomLists[index] = updatedList;
-
-      console.log("Updated Rooms RoomList:", updatedRooms);
 
       return updatedRoomLists;
     });
@@ -73,7 +69,6 @@ function MessageProvider ({ children }: ChatProviderProps) {
       }
       if (message !== "") {
         socketEmit("send_message", messageData);
-        console.log('message sent:', messageData)
         setMessageList((list) => [...list, messageData])
         setMessage("");
       }
@@ -85,17 +80,14 @@ function MessageProvider ({ children }: ChatProviderProps) {
 
   useEffect(() => {
     addSocketListener("receive_message", (data: MessageData) => {
-      console.log('message received', data)
       const messageData = {
         ...data,
         sender: data.user === socket.id ? "me" : "other"
       }
       setMessageList((list) => [...list, messageData]);
-      console.log('messageList', messageList)
     });
 
     addSocketListener('joined_empty_room', (roomName: string) => {
-      console.log('joined_empty_room:', socket.id);
       const messageData = {
         user: socket.id,
         room: roomName,
@@ -104,7 +96,9 @@ function MessageProvider ({ children }: ChatProviderProps) {
         sender: "me",
         socketId: socket.id,
       }
-      setMessageList((list) => [...list, messageData]);
+      
+      !messageList.some(existingMessage => existingMessage.message === messageData.message) &&
+      setMessageList(list => [...list, messageData]);
     });
 
     return () => {

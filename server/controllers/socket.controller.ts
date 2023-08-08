@@ -17,7 +17,6 @@ const socketInit = function (
 
   socket.on("join_room", async (roomData) => {
     const chatroom = await dbModels.getOne(roomData.name);
-    console.log("ROOM DATA::", roomData);
 
     if (chatroom) {
       socket.join(chatroom.name!);

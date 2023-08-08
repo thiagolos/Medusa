@@ -14,7 +14,6 @@ function RoomList() {
     handleRoomButtonClick(roomName);
     toggleSelector();
     handleBackgroundColor()
-    console.log('I was executed handleBf')
 
   };
 

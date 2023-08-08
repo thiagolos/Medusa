@@ -21,6 +21,23 @@ describe('frontend spec', () => {
 
   })
 
+  it('should add messages correctly', () => {
+    cy.get('.SelectorInput')
+      .type('Test Room')
+
+    cy.get('.JoinButton')
+      .click()
+
+    cy.get('.MessageInput')
+      .type('Test message')
+
+    cy.get('.SendButton')
+      .click()
+
+    cy.get('.Message.me')
+      .should('have.length', 2)
+  })
+
   it('room should be removed if closed with no-one else in the chat', () => {
     cy.get('.SelectorInput')
       .type('Test Room')

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef, MouseEvent } from "react";
+import { useContext, useEffect, useState, useRef, MouseEvent, FormEvent } from "react";
 import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
@@ -9,11 +9,13 @@ function Chat({ roomName }: { roomName: string }) {
 
   // MESSAGE FUNCTIONALITY
 
-  const handleSendMessage = (e: MouseEvent) => {
+  const handleSendMessage = (event: FormEvent) => {
+    event.preventDefault();
     sendMessage(roomName);
-    const parentNode = (e.target as Element).parentNode;
+    const parentNode = (event.target as Element).parentNode;
     const input = parentNode!.querySelector('input');
     input!.value = '';
+    setFormInput('');
   };
 
   const handleLeaveRoom = () => {
@@ -28,6 +30,7 @@ function Chat({ roomName }: { roomName: string }) {
 
   const [colorMap, setColorMap] = useState({} as ColorMap);
   const [color] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
+  const [formInput, setFormInput] = useState('')
 
   useEffect(() => {
     setColorMap((currentColorMap) => {
@@ -64,7 +67,6 @@ function Chat({ roomName }: { roomName: string }) {
 
   function calculateLeft() {
     const value = `${Math.floor(Math.random() * (window.innerWidth - 300))}px`;
-    console.log('VALEU', value)
     return value;
   }
 
@@ -148,16 +150,27 @@ function Chat({ roomName }: { roomName: string }) {
             ))}
             </div>
 
-                <div className="ChatInputWrapper">
+                <form
+                  onSubmit={handleSendMessage}
+                  className="ChatInputWrapper"
+                  name="ChatInputWrapper"
+                >
+
                   <div className="ChatInput">
-                    <input className="MessageInput" type="text"
-                      onChange={(event) => {
-                        setMessage(event.target.value);
+                    <input 
+                    className="MessageInput" 
+                    name="MessageInput"
+                    type="text"
+                    value={formInput}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setFormInput(value);
+                      setMessage(event.target.value);
                       }}>
                     </input>
                     <button className="SendButton" onClick={handleSendMessage}>Send</button>
                   </div>
-                </div>
+                  </form>
 
 
           </div>

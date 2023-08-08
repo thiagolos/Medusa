@@ -25,7 +25,6 @@ function ChatProvider ({ children }: ChatProviderProps) {
   function handleBackgroundColor() {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     setBgColor(randomColor);
-    console.log('I was executed')
   }
 
     const roomData = {
@@ -53,7 +52,6 @@ function ChatProvider ({ children }: ChatProviderProps) {
     if(roomName !== "") {
       const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === roomName))
       if (userAlreadyInRoom) {
-        console.log("You are already in this room")
         return
       }
       const existingRoom = chatrooms.some((c) => c.name === roomName);
@@ -163,7 +161,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
         }
       });
       setChatrooms(updatedChatrooms);
-      console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
+
     });
 
     return () => {
@@ -187,7 +185,6 @@ function ChatProvider ({ children }: ChatProviderProps) {
         }
       });
       setChatrooms(updatedChatrooms);
-      console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
     return () => {
@@ -214,21 +211,6 @@ function ChatProvider ({ children }: ChatProviderProps) {
     }
     setPositions(newPositions);
   }, []);
-
-
-  // TEST LOGS
-
-  // useEffect(()=>{
-  //   console.log('CHATROOMS', chatrooms)
-  //   console.log('Chatrooms, users', chatrooms[0])
-  // })
- // useEffect(() => {
-  //   console.log("roomlists after leave:", roomLists)
-  // })
-    // useEffect(() => {
-  //   console.log("roomlists after update ChatContext:", roomLists)
-  // })
-
 
   const value = {
     roomData,

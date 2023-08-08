@@ -20,7 +20,6 @@ export function getAll () {
   const response = fetch('http://localhost:3001/chatrooms')
     .then((res) => res.json())
     .catch((err) => console.error(err));
-  console.log(response);
   return response;
 }
 

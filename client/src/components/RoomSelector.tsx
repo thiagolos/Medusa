@@ -41,7 +41,11 @@ function RoomSelector() {
                 onChange={(event)=>{
                   const value = event.target.value;
                   setFormInput(value);
-                  setRoomName(value);
+                  setRoomName(value.split(" ").map((word) => {
+                    if (word[0]){
+                      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+                    }
+                }).join(" "));
                 }}
                 autoComplete="off"
               >
