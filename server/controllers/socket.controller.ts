@@ -43,7 +43,6 @@ const socketInit = function (
   socket.on("leave_room", async (roomName) => {
     socket.leave(roomName);
     const chatroom = await dbModels.getOne(roomName);
-    console.log(`thisss=> ${chatroom}`);
     if (chatroom) {
       chatroom.users -= 1;
       chatroom.usernames = chatroom.usernames.filter(
