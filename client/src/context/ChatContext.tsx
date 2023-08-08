@@ -14,7 +14,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
   // DEFINTIONS
 
   // ROOOMS
-  const [room, setRoom] = useState<string>("");
+  const [roomName, setRoomName] = useState<string>("");
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
   const [userCount, setUserCount] = useState(0);
   const [roomLists, setRoomLists] = useState<User[]>([]);
@@ -29,7 +29,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
   }
 
     const roomData = {
-      name: room,
+      name: roomName,
       time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
       creator: socket.id,
     };
@@ -49,14 +49,14 @@ function ChatProvider ({ children }: ChatProviderProps) {
 
   // FUNCTIONS
 
-  const joinRoom = () => {
-    if(room !== "") {
-      const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === room))
+  const joinRoom = (roomName: string) => {
+    if(roomName !== "") {
+      const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === roomName))
       if (userAlreadyInRoom) {
         console.log("You are already in this room")
         return
       }
-      const existingRoom = chatrooms.some((c) => c.name === room);
+      const existingRoom = chatrooms.some((c) => c.name === roomName);
       if (existingRoom){
         socketEmit("join_room", roomData);
 
@@ -66,7 +66,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
             );
             const updatedRooms: RoomData[] = [
               ...prevRoomLists[index].rooms,
-              { name: room, time: roomData.time },
+              { name: roomName, time: roomData.time },
             ];
             const updatedList = {
               socketId: socket.id,
@@ -77,7 +77,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
             return updatedRoomLists;
         });
       } else {
-        socketEmit("create_room", room);
+        socketEmit("create_room", roomName);
         socketEmit("join_room", roomData);
 
         setRoomLists((prevRoomLists) => {
@@ -86,7 +86,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
           );
           const updatedRooms = [
             ...prevRoomLists[index].rooms,
-            { name: room, time: roomData.time },
+            { name: roomName, time: roomData.time },
           ];
           const updatedList = {
             socketId: socket.id,
@@ -100,14 +100,14 @@ function ChatProvider ({ children }: ChatProviderProps) {
     }
   };
 
-  const leaveRoom = (room: string) => {
-    socketEmit("leave_room", room);
+  const leaveRoom = (roomName: string) => {
+    socketEmit("leave_room", roomName);
     setRoomLists((prevRoomLists) => {
       const index = prevRoomLists.findIndex(
         (list) => list.socketId === socket.id
       );
       const updatedRooms = prevRoomLists[index].rooms.filter(
-        (r) => r.name !== room
+        (r) => r.name !== roomName
       );
       const updatedList = {
         socketId: socket.id,
@@ -232,8 +232,8 @@ function ChatProvider ({ children }: ChatProviderProps) {
 
   const value = {
     roomData,
-    room,
-    setRoom,
+    roomName,
+    setRoomName,
     chatrooms,
     setChatrooms,
     getAll,

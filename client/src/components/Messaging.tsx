@@ -2,7 +2,7 @@ import { useContext, useEffect, useState, useRef, MouseEvent } from "react";
 import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
-function Chat({roomName}:{roomName:string}) {
+function Chat({ roomName }: { roomName: string }) {
 
   const { setMessage, messageList, sendMessage } = useContext(MessageContext);
   const { leaveRoom, handleBackgroundColor, socket } = useContext(ChatContext);
@@ -27,7 +27,7 @@ function Chat({roomName}:{roomName:string}) {
   }
 
   const [colorMap, setColorMap] = useState({} as ColorMap);
-  const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
+  const [color] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
 
   useEffect(() => {
     setColorMap((currentColorMap) => {

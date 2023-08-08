@@ -51,15 +51,15 @@ export interface Position {
 }
 export interface ChatContext {
   roomData: RoomData;
-  room: string;
-  setRoom: React.Dispatch<React.SetStateAction<string>>;
+  roomName: string;
+  setRoomName: React.Dispatch<React.SetStateAction<string>>;
   chatrooms: Chatroom[];
   setChatrooms: React.Dispatch<React.SetStateAction<Chatroom[]>>;
   getAll: () => Promise<any>;
   socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   userCount: number;
   setUserCount: React.Dispatch<React.SetStateAction<number>>;
-  joinRoom: () => void;
+  joinRoom: (room: string) => void;
   leaveRoom: (roomName: string) => void;
   roomLists: User[];
   setRoomLists: React.Dispatch<React.SetStateAction<User[]>>;
