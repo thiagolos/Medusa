@@ -42,7 +42,7 @@ function RoomSelector() {
                 value={formInput}
                 onChange={(event)=>{
                   setFormInput(event.target.value);
-                  setRoom(formInput);
+                  setRoom(event.target.value);
                 }}
                 autoComplete="off"
               >
