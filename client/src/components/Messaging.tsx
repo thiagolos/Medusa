@@ -2,12 +2,11 @@ import { useContext, useEffect, useState, useRef, MouseEvent } from "react";
 import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
-function Chat() {
+function Chat({ roomName }: { roomName: string }) {
 
   const {setMessage, messageList, sendMessage } = useContext(MessageContext);
-  const {leaveRoom, handleBackgroundColor, socket, room } = useContext(ChatContext);
+  const {leaveRoom, handleBackgroundColor, socket } = useContext(ChatContext);
 
-  const roomName = room;
   // MESSAGE FUNCTIONALITY
 
   const handleSendMessage = (e: MouseEvent) => {

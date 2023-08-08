@@ -3,24 +3,27 @@ import { ChatContext } from "../context/ChatContext";
 
 function RoomSelector() {
 
-  const { room, setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible, handleBackgroundColor} = useContext(ChatContext)
+  const { roomName, setRoomName, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible, handleBackgroundColor} = useContext(ChatContext)
   const [formInput, setFormInput] = useState('')
 
   const handleJoinRoom = (e: FormEvent) => {
-    console.log("FORM INPUT::", formInput);
+    console.log("FORM INPUT: ", formInput);
+    // console.log("FORM EVENT: ", e);
     e.preventDefault();
     setSelectorVisible(false);
     setSelectorClosed(true)
     handleBackgroundColor()
-    joinRoom();
+    console.log(roomName);
+    console.log(roomName);
+    joinRoom(roomName);
     setFormInput('');
   };
-  
+
   const handleToggleSelector = () => {
     setSelectorVisible(!isSelectorVisible);
     setSelectorClosed(false);
   }
-  
+
   return (
     <>
       {isSelectorVisible && !isSelectorClosed && (
@@ -31,8 +34,7 @@ function RoomSelector() {
               onSubmit={handleJoinRoom}
               className="SelectorInputAndButton"
               name="SelectorInputAndButton"
-              
-              >
+            >
 
               <input
                 className="SelectorInput"
@@ -42,7 +44,7 @@ function RoomSelector() {
                 value={formInput}
                 onChange={(event)=>{
                   setFormInput(event.target.value);
-                  setRoom(formInput);
+                  setRoomName(formInput);
                 }}
                 autoComplete="off"
               >
