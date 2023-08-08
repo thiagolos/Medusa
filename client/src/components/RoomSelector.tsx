@@ -7,19 +7,20 @@ function RoomSelector() {
   const [formInput, setFormInput] = useState('')
 
   const handleJoinRoom = (e: FormEvent) => {
+    console.log("FORM INPUT::", formInput);
     e.preventDefault();
     setSelectorVisible(false);
     setSelectorClosed(true)
     handleBackgroundColor()
-    joinRoom(room);
+    joinRoom();
     setFormInput('');
   };
-
+  
   const handleToggleSelector = () => {
     setSelectorVisible(!isSelectorVisible);
     setSelectorClosed(false);
   }
-
+  
   return (
     <>
       {isSelectorVisible && !isSelectorClosed && (
@@ -30,8 +31,8 @@ function RoomSelector() {
               onSubmit={handleJoinRoom}
               className="SelectorInputAndButton"
               name="SelectorInputAndButton"
-
-            >
+              
+              >
 
               <input
                 className="SelectorInput"
@@ -41,7 +42,7 @@ function RoomSelector() {
                 value={formInput}
                 onChange={(event)=>{
                   setFormInput(event.target.value);
-                  setRoom(event.target.value);
+                  setRoom(formInput);
                 }}
                 autoComplete="off"
               >

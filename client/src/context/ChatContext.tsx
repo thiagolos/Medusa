@@ -49,7 +49,7 @@ function ChatProvider ({ children }: ChatProviderProps) {
 
   // FUNCTIONS
 
-  const joinRoom = (room: string) => {
+  const joinRoom = () => {
     if(room !== "") {
       const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === room))
       if (userAlreadyInRoom) {

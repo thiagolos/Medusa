@@ -30,18 +30,17 @@ function Chat() {
   const [colorMap, setColorMap] = useState({} as ColorMap);
   const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
 
-
   useEffect(() => {
-    setColorMap((prevColorMap) => {
+    setColorMap((currentColorMap) => {
       return {
-        ...prevColorMap,
+        ...currentColorMap,
         [socket.id]: color,
       };
     });
-  }, [socket.id, color]);
+  }, [color]);
 
   function getColor(sender: string) {
-    if (colorMap[sender]) {
+    if (!colorMap[sender]) {
       // Generate a random color for new users
       setColorMap((prevColorMap) => {
         return {
