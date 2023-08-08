@@ -112,7 +112,7 @@ function MessageProvider ({ children }: ChatProviderProps) {
       removeSocketListener("joined_empty_room");
     };
 
-  }, []);
+  }, [messageList]);
 
   const value = {
     message,

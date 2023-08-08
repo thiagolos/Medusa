@@ -55,7 +55,7 @@ export interface ChatContext {
   setRoomName: React.Dispatch<React.SetStateAction<string>>;
   chatrooms: Chatroom[];
   setChatrooms: React.Dispatch<React.SetStateAction<Chatroom[]>>;
-  getAll: () => Promise<any>;
+  getAll: () => Promise<Chatroom[]>;
   socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   userCount: number;
   setUserCount: React.Dispatch<React.SetStateAction<number>>;

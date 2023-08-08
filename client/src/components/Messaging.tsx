@@ -36,7 +36,7 @@ function Chat({ roomName }: { roomName: string }) {
         [socket.id]: color,
       };
     });
-  }, [color]);
+  }, [socket.id, color]);
 
   function getColor(sender: string) {
     if (!colorMap[sender]) {

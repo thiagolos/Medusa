@@ -1,6 +1,6 @@
 describe('frontend spec', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:5174')
+    cy.visit('http://localhost:5173')
   })
 
 
@@ -62,6 +62,9 @@ describe('frontend spec', () => {
     cy.get('.RoomButton')
       .contains('Test Room')
 
+    cy.get('.PlusButton button')
+      .click()
+
     cy.get('.SelectorInput')
       .type('Test Room 2')
 
@@ -77,3 +80,5 @@ describe('frontend spec', () => {
       .contains('Test Room 2')
   })
 })
+
+export {}
