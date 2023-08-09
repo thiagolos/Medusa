@@ -131,19 +131,19 @@ function ChatProvider({ children }: ChatProviderProps) {
       if (existingRoom) {
         socketEmit("join_room", roomData);
 
-        setRoomLists((prevRoomLists: User[]): User[] => {
-          const index = prevRoomLists.findIndex(
+        setRoomLists((currentRoomList: User[]): User[] => {
+          const index = currentRoomList.findIndex(
             (list: User) => list.socketId === socket.id
           );
           const updatedRooms: RoomData[] = [
-            ...prevRoomLists[index].rooms,
+            ...currentRoomList[index].rooms,
             { name: roomName, time: roomData.time }
           ];
           const updatedList = {
             socketId: socket.id,
             rooms: updatedRooms
           };
-          const updatedRoomLists = [...prevRoomLists];
+          const updatedRoomLists = [...currentRoomList];
           updatedRoomLists[index] = updatedList;
           return updatedRoomLists;
         });
@@ -151,19 +151,19 @@ function ChatProvider({ children }: ChatProviderProps) {
         socketEmit("create_room", roomName);
         socketEmit("join_room", roomData);
 
-        setRoomLists(prevRoomLists => {
-          const index = prevRoomLists.findIndex(
+        setRoomLists(currentRoomList => {
+          const index = currentRoomList.findIndex(
             list => list.socketId === socket.id
           );
           const updatedRooms = [
-            ...prevRoomLists[index].rooms,
+            ...currentRoomList[index].rooms,
             { name: roomName, time: roomData.time }
           ];
           const updatedList = {
             socketId: socket.id,
             rooms: updatedRooms
           };
-          const updatedRoomLists = [...prevRoomLists];
+          const updatedRoomLists = [...currentRoomList];
           updatedRoomLists[index] = updatedList;
           return updatedRoomLists;
         });
@@ -173,18 +173,24 @@ function ChatProvider({ children }: ChatProviderProps) {
 
   const leaveRoom = (roomName: string) => {
     socketEmit("leave_room", roomName);
-    setRoomLists(prevRoomLists => {
-      const index = prevRoomLists.findIndex(
+    setRoomLists(currentRoomList => {
+      const index = currentRoomList.findIndex(
         list => list.socketId === socket.id
       );
-      const updatedRooms = prevRoomLists[index].rooms.filter(
+      const updatedRooms = currentRoomList[index].rooms.filter(
         r => r.name !== roomName
       );
       const updatedList = {
         socketId: socket.id,
         rooms: updatedRooms
       };
-      const updatedRoomLists = [...prevRoomLists];
+
+      if (updatedRooms.length === 0){
+        setSelectorVisible(true);
+        setSelectorClosed(false);
+      }
+
+      const updatedRoomLists = [...currentRoomList];
       updatedRoomLists[index] = updatedList;
       return updatedRoomLists;
     });

@@ -108,10 +108,8 @@ function MessageProvider({ children }: ChatProviderProps) {
         sender: "me",
         socketId: socket.id
       };
-
-      !messageList.some(
-        existingMessage => existingMessage.message === messageData.message
-      ) && setMessageList(list => [...list, messageData]);
+    
+      setMessageList(list => [...list, messageData]);
     });
 
     return () => {

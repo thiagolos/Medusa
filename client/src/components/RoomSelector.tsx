@@ -32,9 +32,12 @@ function RoomSelector() {
   };
 
   const selectorInputRef = useRef<HTMLInputElement>(null);
+  const focusInput = () => {
+    selectorInputRef.current!.focus();
+  }
 
   useEffect(() => {
-    selectorInputRef.current!.focus();
+    focusInput()
   }, []);
 
   return (
@@ -87,7 +90,7 @@ function RoomSelector() {
       )}
       {isSelectorClosed && (
         <div className="PlusButton">
-          <button onClick={handleToggleSelector}>+</button>
+          <button onClick={() => { handleToggleSelector(); setTimeout(()=>{selectorInputRef.current!.focus()},50);}}>+</button>
         </div>
       )}
     </>
