@@ -1,41 +1,29 @@
 /* eslint-disable */
-import express from "express";
-import router from "../router.js";
 import supertest from "supertest";
-import dbModels from "../models/chatroom.model.js";
+import dbModels from "../models/chatroom.model.ts";
 import mongoose from "mongoose";
-import { createServer } from "http";
-import { Server } from "socket.io";
 import Client from "socket.io-client";
+import app, { server } from '../index'
 
 const Chatroom = dbModels.Chatroom;
 const databaseName = "test";
 
 describe("Integration tests", () => {
-  let io, serverSocket, clientSocket;
-  const app = express();
-  app.use(express.json());
-  app.use(router);
+  let clientSocket;
   const request = supertest(app);
 
   beforeAll(async () => {
-    const httpServer = createServer(app);
-    io = new Server(httpServer);
     const url = `mongodb://127.0.0.1/${databaseName}`;
     await mongoose.connect(url, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    });
-
-    httpServer.listen(() => {
-      const port = httpServer.address().port;
-      clientSocket = new Client(`http://localhost:${port}`);
-      io.on("connection", (socket) => {
-        serverSocket = socket;
-      });
+    })
+    server.listen(3001, () => {
+      console.log(`Test server running on port: 3001`);
+      clientSocket = new Client(`http://localhost:3001`);
       clientSocket.on("connect", () => {
         console.log("Client connected");
-      });
+    });
     });
   });
 
@@ -46,7 +34,6 @@ describe("Integration tests", () => {
   afterAll(async () => {
     await Chatroom.collection.drop();
     mongoose.connection.close();
-    io.close();
     clientSocket.close();
   });
 
@@ -63,33 +50,33 @@ describe("Integration tests", () => {
     expect(JSON.parse(response.text).length).toBe(2);
   });
 
-  test("should establish socket connection", (done) => {
-    clientSocket.on("test", (arg) => {
-      expect(arg).toBe("works");
+  test("should create room", (done) => {
+    clientSocket.emit("create_room", "testRoom");
+    clientSocket.on("update_chatrooms", (response) => {
+      expect(response.length).toBe(1);
       done();
     });
-    serverSocket.emit("test", "works");
   });
 
-  it("should join a room, or create one if it does not exist", (done) => {
-    const testRoom = {
-      name: "test room",
-      time:
-        new Date(Date.now()).getHours() +
-        ":" +
-        new Date(Date.now()).getMinutes(),
-      creator: "testerman",
-    };
-    serverSocket.on("create_room", async (roomName) => {
-      expect(roomName).toBe(testRoom.name);
+  // it("should join a room, or create one if it does not exist", (done) => {
+  //   const testRoom = {
+  //     name: "test room",
+  //     time:
+  //       new Date(Date.now()).getHours() +
+  //       ":" +
+  //       new Date(Date.now()).getMinutes(),
+  //     creator: "testerman",
+  //   };
+  //   serverSocket.on("create_room", async (roomName) => {
+  //     expect(roomName).toBe(testRoom.name);
 
-      dbModels.addOrUpdate(roomName);
-      let response = await request.get("/chatrooms");
-      expect(JSON.parse(response.text).length).toBe(1);
+  //     dbModels.addOrUpdate(roomName);
+  //     let response = await request.get("/chatrooms");
+  //     expect(JSON.parse(response.text).length).toBe(1);
 
-      io.emit("update_chatrooms", await dbModels.getAll());
-      done();
-    });
-    clientSocket.emit("create_room", testRoom.name);
-  });
+  //     io.emit("update_chatrooms", await dbModels.getAll());
+  //     done();
+  //   });
+  //   clientSocket.emit("create_room", testRoom.name);
+  // });
 });

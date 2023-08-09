@@ -7,13 +7,12 @@ import socketInit from "./controllers/socket.controller";
 import { ClientToServerEvents, ServerToClientEvents } from "./Types";
 
 const app = express();
-const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.json());
 app.use(router);
 
-const socketPort = 3001;
+export const server = http.createServer(app);
 
 export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
   server,
@@ -27,6 +26,6 @@ export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
 
 io.on("connection", socketInit);
 
-server.listen(socketPort, () => {
-  console.log(`Server running on port: ${socketPort}`);
-});
+
+export default app;
+
