@@ -22,14 +22,11 @@ type ChatProviderProps = {
 };
 
 function ChatProvider({ children }: ChatProviderProps) {
-  // DEFINTIONS
-
-  // ROOOMS
+  // Room States
   const [roomName, setRoomName] = useState<string>("");
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
   const [userCount, setUserCount] = useState(0);
   const [roomLists, setRoomLists] = useState<User[]>([]);
-
   const colors = [
     "rgb(210, 185, 31)",
     "rgb(37,73,155)",
@@ -38,6 +35,13 @@ function ChatProvider({ children }: ChatProviderProps) {
     "rgb(217,117,117)"
   ];
   const [bgColor, setBgColor] = useState(colors[0]);
+
+  // SELECTOR
+  const [isSelectorVisible, setSelectorVisible] = useState(true);
+  const [isSelectorClosed, setSelectorClosed] = useState(false);
+
+  // POSITIONS
+  const [positions, setPositions] = useState<Position[]>([]);
 
   function handleBackgroundColor() {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -50,18 +54,6 @@ function ChatProvider({ children }: ChatProviderProps) {
       new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
     creator: socket.id
   };
-
-  // SELECTOR
-  const [isSelectorVisible, setSelectorVisible] = useState(true);
-  const [isSelectorClosed, setSelectorClosed] = useState(false);
-
-  // POSITIONS
-  const [positions, setPositions] = useState<Position[]>([]);
-
-  // LOGIC
-  // ROUTES
-
-  // FUNCTIONS
 
   const joinRoom = (roomName: string) => {
     if (roomName !== "") {
