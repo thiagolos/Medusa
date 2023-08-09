@@ -3,7 +3,6 @@ describe('frontend spec', () => {
     cy.visit('http://localhost:5174')
   })
 
-
   it('should add a room correctly', () => {
     cy.get('.SelectorInput')
       .type('Test Room')
@@ -95,6 +94,20 @@ describe('frontend spec', () => {
 
     cy.get('.RoomButton')
       .contains('Test Room 2')
+  })
+
+  it('should open room selector when last room is closed', () => {
+    cy.get('.SelectorInput')
+      .type('Test Room')
+
+    cy.get('.JoinButton')
+      .click()
+
+    cy.get('.LeaveButton')
+      .click()
+
+    cy.get('.SelectorInput')
+    
   })
 })
 
