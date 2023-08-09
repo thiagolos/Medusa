@@ -1,13 +1,12 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 
 :root {
-  --primary-color: #253B8A;
+  --primary-color: #253b8a;
   --secondary-color: #27292b;
   --success-color: #2842a3;
 }
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -20,14 +19,12 @@ body {
 }
 
 body {
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   font-weight: 600;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(210,185,31);
-
+  background-color: rgb(210, 185, 31);
 }
-
 
 .App {
   display: flex;
@@ -39,9 +36,9 @@ body {
 
 .page-border {
   position: fixed;
-  inset:0;
-  padding:16px;
-  border: 16px solid rgb(217,207,196);
+  inset: 0;
+  padding: 16px;
+  border: 16px solid rgb(217, 207, 196);
   z-index: 9999;
   pointer-events: none;
 }
@@ -62,18 +59,17 @@ body {
   z-index: 10;
 }
 
-.RoomButton{
+.RoomButton {
   background: none;
   border: none;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 52px;
   font-weight: 700;
   text-transform: uppercase;
   margin: -8px 40px;
   color: inherit;
 }
-
 
 /* ROOM SELECTOR */
 
@@ -86,21 +82,21 @@ body {
   flex-direction: column;
   gap: 15px;
   width: 30%;
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   font-weight: 600;
   font-size: 16px;
   /* text-align: justify; */
   word-wrap: break-word;
 }
 
-.SelectorInputAndButton{
+.SelectorInputAndButton {
   display: flex;
   justify-content: space-evenly;
   width: 100%;
   gap: 10px;
 }
 
-.JoinButton{
+.JoinButton {
   /* background-color: rgb(182,182,182, 0.3); */
 
   background-color: rgba(255, 255, 255, 0.13);
@@ -108,13 +104,12 @@ body {
   padding: 10px 10px;
   border: none;
   cursor: pointer;
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   font-weight: 700;
   font-size: 13.3px;
 }
 
-
-.SelectorInput{
+.SelectorInput {
   padding: 10px 10px;
   /* background-color: rgb(182,182,182, 0.1); */
   background-color: rgba(255, 255, 255, 0.06);
@@ -123,16 +118,16 @@ body {
   text-shadow: 0 0 0 #000;
   border: none;
   outline: none;
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   /* border-radius: 6px; */
 }
 
 .SelectorInput::placeholder {
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   font-weight: 300;
   font-size: 13.3px;
   /* font-size: 16px; */
-  color:#000000;
+  color: #000000;
 }
 
 input[type="text"] {
@@ -152,7 +147,7 @@ input[type="text"] {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   font-weight: 700;
   font-size: 13px;
 }
@@ -171,28 +166,26 @@ input[type="text"] {
   border-radius: 50%;
 }
 
-.ChatList{
+.ChatList {
   display: flex;
   flex-direction: column;
   gap: 10px;
-
 }
 
-.ChatBar{
+.ChatBar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   font-size: 16px;
   font-weight: 600;
-  background-color: rgb(182,182,182, 0.6);
+  background-color: rgb(182, 182, 182, 0.6);
   padding-right: 10px;
   padding-left: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
   text-transform: capitalize;
-
 }
 
 .Message {
@@ -202,7 +195,6 @@ input[type="text"] {
   font-size: 16;
 }
 
-
 .MessageContent {
   font-weight: 400;
   font-size: 15px;
@@ -210,33 +202,31 @@ input[type="text"] {
   word-wrap: break-word;
 }
 
-.MessageInput{
+.MessageInput {
   padding: 10px 10px;
-    background-color: rgba(255, 255, 255, 0.05);
-    text-shadow: 0 0 0 #000;
-    border: none;
-    outline: none;
-    font-family: 'Inter', 'sans-serif';
-    border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.05);
+  text-shadow: 0 0 0 #000;
+  border: none;
+  outline: none;
+  font-family: "Inter", "sans-serif";
+  border-radius: 2px;
 }
 
-
 .MessageInput::placeholder {
-
   color: currentColor;
   font-weight: 300;
   font-size: 13px;
 }
 
-.SendButton{
+.SendButton {
   background-color: rgb(255 255 255 / 6%);
-    border-radius: 2px;
-    padding: 10px 10px;
-    border: none;
-    cursor: pointer;
-    font-family: 'Inter', 'sans-serif';
-    font-weight: 700;
-    font-size: 13.3px;
+  border-radius: 2px;
+  padding: 10px 10px;
+  border: none;
+  cursor: pointer;
+  font-family: "Inter", "sans-serif";
+  font-weight: 700;
+  font-size: 13.3px;
 }
 
 .ChatBar:hover {
@@ -289,7 +279,7 @@ input[type="text"] {
   word-wrap: break-word;
 }
 
-.MessageWrapper{
+.MessageWrapper {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -314,7 +304,7 @@ input[type="text"] {
 }
 
 .User_Time {
-  font-family: 'Inter', 'sans-serif';
+  font-family: "Inter", "sans-serif";
   font-size: 12px;
   color: #aaa;
   margin-bottom: 5px;

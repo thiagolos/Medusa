@@ -1,17 +1,27 @@
-import { ReactNode, createContext, useEffect, useState, useContext } from "react";
-import { socketEmit, socket, addSocketListener, removeSocketListener } from "../apiService";
-import type { MessageContext, User, MessageData } from '../Types';
+import {
+  ReactNode,
+  createContext,
+  useEffect,
+  useState,
+  useContext
+} from "react";
+import {
+  socketEmit,
+  socket,
+  addSocketListener,
+  removeSocketListener
+} from "../apiService";
+import type { MessageContext, User, MessageData } from "../Types";
 import { ChatContext } from "./ChatContext";
 
 const MessageContext = createContext<MessageContext>({} as MessageContext);
 
 type ChatProviderProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
-function MessageProvider ({ children }: ChatProviderProps) {
-
-  const { setRoomName , roomLists, setRoomLists } = useContext(ChatContext)
+function MessageProvider({ children }: ChatProviderProps) {
+  const { setRoomName, roomLists, setRoomLists } = useContext(ChatContext);
 
   const [message, setMessage] = useState<string>("");
   const [messageList, setMessageList] = useState<MessageData[]>([]);
@@ -80,29 +90,33 @@ const sendMessage = async (roomName: string) => {
       const messageData = {
         ...data,
         sender: data.user === socket.id ? "me" : "other"
-      }
-      setMessageList((list) => [...list, messageData]);
+      };
+      setMessageList(list => [...list, messageData]);
     });
 
-    addSocketListener('joined_empty_room', (roomName: string) => {
+    addSocketListener("joined_empty_room", (roomName: string) => {
       const messageData = {
         user: socket.id,
         room: roomName,
-        message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
-        time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+        message:
+          "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
         sender: "me",
-        socketId: socket.id,
-      }
-      
-      !messageList.some(existingMessage => existingMessage.message === messageData.message) &&
-      setMessageList(list => [...list, messageData]);
+        socketId: socket.id
+      };
+
+      !messageList.some(
+        existingMessage => existingMessage.message === messageData.message
+      ) && setMessageList(list => [...list, messageData]);
     });
 
     return () => {
       removeSocketListener("receive_message");
       removeSocketListener("joined_empty_room");
     };
-
   }, [messageList]);
 
   const value = {
@@ -112,13 +126,11 @@ const sendMessage = async (roomName: string) => {
     setMessageList,
     sendMessage,
     handleRoomButtonClick
-  }
+  };
 
   return (
-    < MessageContext.Provider value={value} >
-      {children}
-    </ MessageContext.Provider>
-  )
+    <MessageContext.Provider value={value}>{children}</MessageContext.Provider>
+  );
 }
 
-export { MessageContext, MessageProvider }
+export { MessageContext, MessageProvider };
