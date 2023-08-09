@@ -12,7 +12,13 @@ function RoomSelector() {
     isSelectorVisible,
     handleBackgroundColor
   } = useContext(ChatContext);
+
   const [formInput, setFormInput] = useState("");
+  const selectorInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    focusInput();
+  }, []);
 
   const handleJoinRoom = (e: FormEvent) => {
     e.preventDefault();
@@ -31,14 +37,9 @@ function RoomSelector() {
     setSelectorClosed(false);
   };
 
-  const selectorInputRef = useRef<HTMLInputElement>(null);
-  const focusInput = () => {
+  function focusInput() {
     selectorInputRef.current!.focus();
   }
-
-  useEffect(() => {
-    focusInput()
-  }, []);
 
   return (
     <>
@@ -90,7 +91,16 @@ function RoomSelector() {
       )}
       {isSelectorClosed && (
         <div className="PlusButton">
-          <button onClick={() => { handleToggleSelector(); setTimeout(()=>{selectorInputRef.current!.focus()},50);}}>+</button>
+          <button
+            onClick={() => {
+              handleToggleSelector();
+              setTimeout(() => {
+                selectorInputRef.current!.focus();
+              }, 50);
+            }}
+          >
+            +
+          </button>
         </div>
       )}
     </>
