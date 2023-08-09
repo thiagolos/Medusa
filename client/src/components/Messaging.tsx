@@ -1,9 +1,15 @@
-import { useContext, useEffect, useState, useRef, MouseEvent, FormEvent } from "react";
+import {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  MouseEvent,
+  FormEvent
+} from "react";
 import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
 function Chat({ roomName }: { roomName: string }) {
-
   const { setMessage, messageList, sendMessage } = useContext(MessageContext);
   const { leaveRoom, handleBackgroundColor, socket } = useContext(ChatContext);
 
@@ -13,13 +19,13 @@ function Chat({ roomName }: { roomName: string }) {
     event.preventDefault();
     sendMessage(roomName);
     const parentNode = (event.target as Element).parentNode;
-    const input = parentNode!.querySelector('input');
-    input!.value = '';
-    setFormInput('');
+    const input = parentNode!.querySelector("input");
+    input!.value = "";
+    setFormInput("");
   };
 
   const handleLeaveRoom = () => {
-    handleBackgroundColor()
+    handleBackgroundColor();
     leaveRoom(roomName);
   };
 
@@ -29,14 +35,16 @@ function Chat({ roomName }: { roomName: string }) {
   }
 
   const [colorMap, setColorMap] = useState({} as ColorMap);
-  const [color] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
-  const [formInput, setFormInput] = useState('')
+  const [color] = useState(
+    "#" + ((Math.random() * 0xffffff) << 0).toString(16)
+  ); // Define the color variable
+  const [formInput, setFormInput] = useState("");
 
   useEffect(() => {
-    setColorMap((currentColorMap) => {
+    setColorMap(currentColorMap => {
       return {
         ...currentColorMap,
-        [socket.id]: color,
+        [socket.id]: color
       };
     });
   }, [socket.id, color]);
@@ -44,10 +52,10 @@ function Chat({ roomName }: { roomName: string }) {
   function getColor(sender: string) {
     if (!colorMap[sender]) {
       // Generate a random color for new users
-      setColorMap((prevColorMap) => {
+      setColorMap(prevColorMap => {
         return {
           ...prevColorMap,
-          [sender]: getRandomColor(),
+          [sender]: getRandomColor()
         };
       });
     }
@@ -63,7 +71,7 @@ function Chat({ roomName }: { roomName: string }) {
     return color;
   }
 
-   // POSITIONING
+  // POSITIONING
 
   function calculateLeft() {
     const value = `${Math.floor(Math.random() * (window.innerWidth - 300))}px`;
@@ -89,7 +97,7 @@ function Chat({ roomName }: { roomName: string }) {
     setIsDragging(true);
     setDragOffset({
       x: event.clientX - parseInt(position.left),
-      y: event.clientY - parseInt(position.top),
+      y: event.clientY - parseInt(position.top)
     });
   }
 
@@ -97,7 +105,7 @@ function Chat({ roomName }: { roomName: string }) {
     if (isDragging) {
       setPosition({
         left: event.clientX - dragOffset.x + "px",
-        top: event.clientY - dragOffset.y + "px",
+        top: event.clientY - dragOffset.y + "px"
       });
     }
   }
@@ -105,76 +113,86 @@ function Chat({ roomName }: { roomName: string }) {
   function handleMouseUp() {
     setIsDragging(false);
   }
-  const messagesEndRef = useRef<null | HTMLDivElement>(null)
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({behavior: 'smooth'})
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
-  useEffect(()=>{
-    scrollToBottom()
-  }, [messageList])
-
+  useEffect(() => {
+    scrollToBottom();
+  }, [messageList]);
 
   return (
     <>
-      <div className="MessageContainer" style={{ position: "absolute", ...position }} onMouseDown={handleMouseDown}
+      <div
+        className="MessageContainer"
+        style={{ position: "absolute", ...position }}
+        onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}>
+        onMouseUp={handleMouseUp}
+      >
+        <div className="ChatBar">
+          <div className="Room">{roomName}</div>
+          <button className="LeaveButton" onClick={handleLeaveRoom}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-x-lg"
+              viewBox="0 0 16 16"
+            >
+              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+            </svg>
+          </button>
+        </div>
 
-          <div className="ChatBar">
-            <div className="Room">{roomName}</div>
-            <button className="LeaveButton" onClick={handleLeaveRoom}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
-                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-              </svg>
-            </button>
-          </div>
-
-          <div className="ChatWindow" >
-            <div className="MessageWrapper">
+        <div className="ChatWindow">
+          <div className="MessageWrapper">
             {messageList
-              .filter((messageContent) => messageContent.room === roomName)
+              .filter(messageContent => messageContent.room === roomName)
               .map((messageContent, i) => (
                 <div key={i} className={`Message ${messageContent.sender}`}>
-
-                  <div className="User_Time" style={{ color: getColor(messageContent.socketId) }}>
-                    {messageContent.sender === "me" ? "You" : `User ${messageContent.socketId.substring(0, 5)}`}, {messageContent.time}
+                  <div
+                    className="User_Time"
+                    style={{ color: getColor(messageContent.socketId) }}
+                  >
+                    {messageContent.sender === "me"
+                      ? "You"
+                      : `User ${messageContent.socketId.substring(0, 5)}`}
+                    , {messageContent.time}
                   </div>
 
-                  <div className="MessageContent">{messageContent.message}
-                  </div>
+                  <div className="MessageContent">{messageContent.message}</div>
                   <div ref={messagesEndRef}></div>
-
                 </div>
-            ))}
-            </div>
-
-                <form
-                  onSubmit={handleSendMessage}
-                  className="ChatInputWrapper"
-                  name="ChatInputWrapper"
-                >
-
-                  <div className="ChatInput">
-                    <input 
-                    className="MessageInput" 
-                    name="MessageInput"
-                    type="text"
-                    value={formInput}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      setFormInput(value);
-                      setMessage(event.target.value);
-                      }}>
-                    </input>
-                    <button className="SendButton" onClick={handleSendMessage}>Send</button>
-                  </div>
-                  </form>
-
-
+              ))}
           </div>
 
+          <form
+            onSubmit={handleSendMessage}
+            className="ChatInputWrapper"
+            name="ChatInputWrapper"
+          >
+            <div className="ChatInput">
+              <input
+                className="MessageInput"
+                name="MessageInput"
+                type="text"
+                value={formInput}
+                onChange={event => {
+                  const value = event.target.value;
+                  setFormInput(value);
+                  setMessage(event.target.value);
+                }}
+              ></input>
+              <button className="SendButton" onClick={handleSendMessage}>
+                Send
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );
