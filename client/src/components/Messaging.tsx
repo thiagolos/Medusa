@@ -10,8 +10,38 @@ import { MessageContext } from "../context/MessageContext";
 import { ChatContext } from "../context/ChatContext";
 
 function Chat({ roomName }: { roomName: string }) {
-  const { setMessage, messageList, sendMessage } = useContext(MessageContext);
   const { leaveRoom, handleBackgroundColor, socket } = useContext(ChatContext);
+  const { setMessage, messageList, sendMessage } = useContext(MessageContext);
+
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const messageInputRef = useRef<HTMLInputElement>(null);
+  
+  const [position, setPosition] = useState({ top: "-1000px", left: "-1000px" });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [colorMap, setColorMap] = useState({} as ColorMap);
+  const [isDragging, setIsDragging] = useState(false);
+  const [formInput, setFormInput] = useState("");
+  const [color] = useState(
+    "#" + ((Math.random() * 0xffffff) << 0).toString(16)
+    ); 
+    
+  useEffect(() => {
+    setColorMap(currentColorMap => {
+      return {
+        ...currentColorMap,
+        [socket.id]: color
+      };
+    });
+  }, [socket.id, color]);
+  
+  useEffect(() => {
+    setPosition({ top: calculateTop(), left: calculateLeft() });
+    messageInputRef.current!.focus()
+  }, []);
+  
+  useEffect(() => {
+    scrollToBottom();
+  }, [messageList]);
 
   // MESSAGE FUNCTIONALITY
 
@@ -30,28 +60,13 @@ function Chat({ roomName }: { roomName: string }) {
   };
 
   // COLORS
+
   interface ColorMap {
     [k: string]: string;
   }
-
-  const [colorMap, setColorMap] = useState({} as ColorMap);
-  const [color] = useState(
-    "#" + ((Math.random() * 0xffffff) << 0).toString(16)
-  ); // Define the color variable
-  const [formInput, setFormInput] = useState("");
-
-  useEffect(() => {
-    setColorMap(currentColorMap => {
-      return {
-        ...currentColorMap,
-        [socket.id]: color
-      };
-    });
-  }, [socket.id, color]);
-
+    
   function getColor(sender: string) {
     if (!colorMap[sender]) {
-      // Generate a random color for new users
       setColorMap(prevColorMap => {
         return {
           ...prevColorMap,
@@ -81,18 +96,9 @@ function Chat({ roomName }: { roomName: string }) {
   function calculateTop() {
     return `${Math.floor(Math.random() * (window.innerHeight - 300))}px`;
   }
-
-  const [position, setPosition] = useState({ top: "-1000px", left: "-1000px" });
-
-  useEffect(() => {
-    setPosition({ top: calculateTop(), left: calculateLeft() });
-  }, []);
-
+  
   // MOUSE DRAG AND DROP
-
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-
+  
   function handleMouseDown(event: MouseEvent) {
     setIsDragging(true);
     setDragOffset({
@@ -113,15 +119,10 @@ function Chat({ roomName }: { roomName: string }) {
   function handleMouseUp() {
     setIsDragging(false);
   }
-  const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
+  function scrollToBottom() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messageList]);
 
   return (
     <>
@@ -177,6 +178,7 @@ function Chat({ roomName }: { roomName: string }) {
           >
             <div className="ChatInput">
               <input
+                ref={messageInputRef}
                 className="MessageInput"
                 name="MessageInput"
                 type="text"
@@ -186,6 +188,7 @@ function Chat({ roomName }: { roomName: string }) {
                   setFormInput(value);
                   setMessage(event.target.value);
                 }}
+                autoComplete="off"
               ></input>
               <button className="SendButton" onClick={handleSendMessage}>
                 Send
