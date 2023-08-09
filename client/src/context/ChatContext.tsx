@@ -22,31 +22,84 @@ type ChatProviderProps = {
 };
 
 function ChatProvider({ children }: ChatProviderProps) {
-  // Room States
   const [roomName, setRoomName] = useState<string>("");
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
   const [userCount, setUserCount] = useState(0);
   const [roomLists, setRoomLists] = useState<User[]>([]);
-  const colors = [
-    "rgb(210, 185, 31)",
-    "rgb(37,73,155)",
-    "rgb(130,125,188",
-    "rgb(244,90,51)",
-    "rgb(217,117,117)"
-  ];
-  const [bgColor, setBgColor] = useState(colors[0]);
 
-  // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
 
-  // POSITIONS
   const [positions, setPositions] = useState<Position[]>([]);
 
-  function handleBackgroundColor() {
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    setBgColor(randomColor);
-  }
+  useEffect(() => {
+    addSocketListener("connect", () => {
+      setRoomLists(prevRoomLists => [
+        ...prevRoomLists,
+        { socketId: socket.id, rooms: [] }
+      ]);
+    });
+
+    addSocketListener("update_chatrooms", (chatrooms: Chatroom[]) => {
+      setChatrooms(chatrooms);
+    });
+
+    getAll()
+      .then(data => setChatrooms(data))
+      .catch(err => console.log(err));
+
+    const newPositions = [];
+    for (let i = 0; i < 10; i++) {
+      const top = Math.floor(Math.random() * window.innerHeight);
+      const left = Math.floor(Math.random() * window.innerWidth);
+      newPositions.push({ top, left });
+    }
+    setPositions(newPositions);
+
+    return () => {
+      removeSocketListener("connect");
+      removeSocketListener("update_chatrooms");
+    };
+  }, []);
+
+  useEffect(() => {
+    addSocketListener("user_join", (userData: Room) => {
+      const updatedChatrooms = chatrooms.map(chatroom => {
+        if (chatroom.name === userData.room) {
+          return {
+            ...chatroom,
+            users: userData.userCount,
+            usernames: userData.usernames
+          };
+        } else {
+          return chatroom;
+        }
+      });
+      setChatrooms(updatedChatrooms);
+    });
+
+    addSocketListener("user_leaves", (userData: Room) => {
+      const updatedChatrooms = chatrooms.map(chatroom => {
+        if (chatroom.name === userData.room) {
+          return {
+            ...chatroom,
+            users: userData.userCount,
+            usernames: userData.usernames
+          };
+        } else {
+          return chatroom;
+        }
+      });
+      setChatrooms(updatedChatrooms);
+    });
+
+    return () => {
+      removeSocketListener("user_join");
+      removeSocketListener("user_leaves");
+    };
+  }, [chatrooms]);
+
+
 
   const roomData = {
     name: roomName,
@@ -126,98 +179,6 @@ function ChatProvider({ children }: ChatProviderProps) {
     });
   };
 
-  // USE EFFECTS
-  // ERSTELLUNG DES STORAGE OBJEKTS
-
-  useEffect(() => {
-    addSocketListener("connect", () => {
-      setRoomLists(prevRoomLists => [
-        ...prevRoomLists,
-        { socketId: socket.id, rooms: [] }
-      ]);
-    });
-    return () => {
-      removeSocketListener("connect");
-    };
-  }, []);
-
-  // UPDATE CHATRROMS
-
-  useEffect(() => {
-    addSocketListener("update_chatrooms", (chatrooms: Chatroom[]) => {
-      setChatrooms(chatrooms);
-    });
-    return () => {
-      removeSocketListener("update_chatrooms");
-    };
-  }, []);
-
-  // USER JOINget
-
-  useEffect(() => {
-    addSocketListener("user_join", (userData: Room) => {
-      const updatedChatrooms = chatrooms.map(chatroom => {
-        if (chatroom.name === userData.room) {
-          return {
-            ...chatroom,
-            users: userData.userCount,
-            usernames: userData.usernames
-          };
-        } else {
-          return chatroom;
-        }
-      });
-      setChatrooms(updatedChatrooms);
-    });
-
-    return () => {
-      removeSocketListener("user_join");
-    };
-  }, [chatrooms]);
-
-  // USER LEAVE
-
-  useEffect(() => {
-    addSocketListener("user_leaves", (userData: Room) => {
-      const updatedChatrooms = chatrooms.map(chatroom => {
-        if (chatroom.name === userData.room) {
-          return {
-            ...chatroom,
-            users: userData.userCount,
-            usernames: userData.usernames
-          };
-        } else {
-          return chatroom;
-        }
-      });
-      setChatrooms(updatedChatrooms);
-    });
-
-    return () => {
-      removeSocketListener("user_leaves");
-    };
-  }, [chatrooms]);
-
-  // GET ALL
-
-  useEffect(() => {
-    getAll()
-      .then(data => setChatrooms(data))
-      .catch(err => console.log(err));
-  }, []);
-
-  // POSITIONS
-
-  useEffect(() => {
-    const newPositions = [];
-    for (let i = 0; i < 10; i++) {
-      const top = Math.floor(Math.random() * window.innerHeight);
-      const left = Math.floor(Math.random() * window.innerWidth);
-      newPositions.push({ top, left });
-    }
-    setPositions(newPositions);
-  }, []);
-
   const value = {
     roomData,
     roomName,
@@ -237,27 +198,10 @@ function ChatProvider({ children }: ChatProviderProps) {
     setSelectorClosed,
     setSelectorVisible,
     isSelectorClosed,
-    isSelectorVisible,
-    colors,
-    bgColor,
-    setBgColor,
-    handleBackgroundColor
+    isSelectorVisible
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 }
 
 export { ChatContext, ChatProvider };
-
-// function postOne () {
-//   fetch('http://localhost:3001/chatrooms', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json'
-//   },
-//   body: JSON.stringify(roomData)
-// })
-//   .then(res => res.json())
-//   .then(res => getAll())
-//   .catch(error => console.log(error));
-// }

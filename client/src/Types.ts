@@ -68,10 +68,6 @@ export interface ChatContext {
   setSelectorVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isSelectorClosed: boolean;
   isSelectorVisible: boolean;
-  colors: string[];
-  bgColor: string;
-  setBgColor: React.Dispatch<React.SetStateAction<string>>;
-  handleBackgroundColor: () => void;
 }
 
 export interface MessageContext {

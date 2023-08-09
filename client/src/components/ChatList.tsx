@@ -1,4 +1,4 @@
-import Chat from "./Messaging";
+import Chat from "./Chat";
 import { ChatContext } from "../context/ChatContext";
 import { useContext } from "react";
 import { RoomData, User } from "../Types";
