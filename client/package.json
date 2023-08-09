@@ -10,18 +10,9 @@
     "preview": "vite preview",
     "c": "cypress open"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    "defaults"
+  ],
   "dependencies": {
     "browserslist": "^4.21.10",
     "lodash": "^4.17.21",
@@ -32,16 +23,19 @@
     "web-vitals": "^3.4.0"
   },
   "devDependencies": {
+    "@types/node": "^20.4.8",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "autoprefixer": "^10.4.14",
     "cypress": "^12.17.3",
     "eslint": "^8.45.0",
     "eslint-plugin-react": "^7.33.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "postcss": "^8.4.27",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }
