@@ -28,59 +28,65 @@ function MessageProvider({ children }: ChatProviderProps) {
 
   // MESSAGE FUNCTIONALITY
 
-function handleRoomButtonClick(roomName: string) {
-  const existingRoom = roomLists.some((user) =>
-      user.rooms.some((room) => room.name === roomName)
+  function handleRoomButtonClick(roomName: string) {
+    const existingRoom = roomLists.some(user =>
+      user.rooms.some(room => room.name === roomName)
     );
     if (existingRoom) {
       return;
-  }
+    }
 
-  setRoomName(roomName);
+    setRoomName(roomName);
 
-  const roomData = {
-    name: roomName,
-    time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-    creator: socket.id,
-  };
-
-  socketEmit("join_room", roomData)
-
-  setRoomLists((prevUserList: User[]) => {
-    const index = prevUserList.findIndex((user) => user.socketId === socket.id);
-
-    const updatedRooms = [
-      ...prevUserList[index].rooms,
-      { name: roomName, time: roomData.time },
-    ];
-    const updatedList = {
-      socketId: socket.id,
-      rooms: updatedRooms,
+    const roomData = {
+      name: roomName,
+      time:
+        new Date(Date.now()).getHours() +
+        ":" +
+        new Date(Date.now()).getMinutes(),
+      creator: socket.id
     };
-    const updatedRoomLists = [...prevUserList];
-    updatedRoomLists[index] = updatedList;
 
-    return updatedRoomLists;
-  });
-}
+    socketEmit("join_room", roomData);
 
-const sendMessage = async (roomName: string) => {
-  if (roomName !== "") {
-    const messageData = {
-      user: socket.id,
-      room: roomName,
-      message: message,
-      time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-      sender: "me",
-      socketId: socket.id
-    }
-    if (message !== "") {
-      socketEmit("send_message", messageData);
-      setMessageList((list) => [...list, messageData])
-      setMessage("");
-    }
+    setRoomLists((prevUserList: User[]) => {
+      const index = prevUserList.findIndex(user => user.socketId === socket.id);
+
+      const updatedRooms = [
+        ...prevUserList[index].rooms,
+        { name: roomName, time: roomData.time }
+      ];
+      const updatedList = {
+        socketId: socket.id,
+        rooms: updatedRooms
+      };
+      const updatedRoomLists = [...prevUserList];
+      updatedRoomLists[index] = updatedList;
+
+      return updatedRoomLists;
+    });
   }
-};
+
+  const sendMessage = async (roomName: string) => {
+    if (roomName !== "") {
+      const messageData = {
+        user: socket.id,
+        room: roomName,
+        message: message,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
+        sender: "me",
+        socketId: socket.id
+      };
+      if (message !== "") {
+        socketEmit("send_message", messageData);
+        setMessageList(list => [...list, messageData]);
+        setMessage("");
+      }
+    }
+  };
 
   // USE EFFECTS
   // RECEIVE MESSAGE & JOIN EMPTY ROOM
