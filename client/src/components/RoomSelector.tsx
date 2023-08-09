@@ -1,5 +1,6 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useContext, useState, useEffect, useRef } from "react";
 import { ChatContext } from "../context/ChatContext";
+
 
 function RoomSelector() {
 
@@ -8,6 +9,9 @@ function RoomSelector() {
 
   const handleJoinRoom = (e: FormEvent) => {
     e.preventDefault();
+    if (!formInput){
+      return;
+    }
     setSelectorVisible(false);
     setSelectorClosed(true)
     handleBackgroundColor()
@@ -20,21 +24,30 @@ function RoomSelector() {
     setSelectorClosed(false);
   }
 
+  const selectorInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    selectorInputRef.current!.focus()
+  }, []);
+
+
   return (
     <>
       {isSelectorVisible && !isSelectorClosed && (
         <div className="RoomSelector">
 
             <div>Hello, again!<br/>Is there anything specific, you feel like talking about today?</div>
-            <form
+            <form 
               onSubmit={handleJoinRoom}
               className="SelectorInputAndButton"
               name="SelectorInputAndButton"
+              noValidate
             >
-
               <input
+                ref={selectorInputRef}
                 className="SelectorInput"
                 name="SelectorInput"
+                id="SelectorInput"
                 type="text"
                 placeholder="e.g. Japanese Food, Barbie, ..."
                 value={formInput}
@@ -48,6 +61,7 @@ function RoomSelector() {
                 }).join(" "));
                 }}
                 autoComplete="off"
+                required
               >
               </input>
               <button
