@@ -26,8 +26,6 @@ function MessageProvider({ children }: ChatProviderProps) {
   const [message, setMessage] = useState<string>("");
   const [messageList, setMessageList] = useState<MessageData[]>([]);
 
-  // MESSAGE FUNCTIONALITY
-
   function handleRoomButtonClick(roomName: string) {
     const existingRoom = roomLists.some(user =>
       user.rooms.some(room => room.name === roomName)
@@ -87,9 +85,6 @@ function MessageProvider({ children }: ChatProviderProps) {
       }
     }
   };
-
-  // USE EFFECTS
-  // RECEIVE MESSAGE & JOIN EMPTY ROOM
 
   useEffect(() => {
     addSocketListener("receive_message", (data: MessageData) => {

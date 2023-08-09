@@ -26,6 +26,14 @@ function ChatProvider({ children }: ChatProviderProps) {
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
   const [userCount, setUserCount] = useState(0);
   const [roomLists, setRoomLists] = useState<User[]>([]);
+  const colors = [
+    "rgb(210, 185, 31)",
+    "rgb(37,73,155)",
+    "rgb(130,125,188",
+    "rgb(244,90,51)",
+    "rgb(217,117,117)"
+  ];
+  const [bgColor, setBgColor] = useState(colors[0]);
 
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
@@ -99,7 +107,10 @@ function ChatProvider({ children }: ChatProviderProps) {
     };
   }, [chatrooms]);
 
-
+  function handleBackgroundColor() {
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    setBgColor(randomColor);
+  }
 
   const roomData = {
     name: roomName,
@@ -198,7 +209,11 @@ function ChatProvider({ children }: ChatProviderProps) {
     setSelectorClosed,
     setSelectorVisible,
     isSelectorClosed,
-    isSelectorVisible
+    isSelectorVisible,
+    handleBackgroundColor,
+    bgColor,
+    setBgColor,
+    colors
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
