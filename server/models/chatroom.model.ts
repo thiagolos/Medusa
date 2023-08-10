@@ -3,13 +3,13 @@ import mongoose from "./index";
 // import mongoose from 'mongoose';
 import type { Chatroom } from "../Types";
 
-const chatroomSchema_test_6 = new mongoose.Schema({
+const chatroomSchema = new mongoose.Schema({
   name: String,
   users: { type: Number, default: 0 },
   usernames: { type: [String], default: [] },
 });
 
-const Chatroom = mongoose.model("Chatroom", chatroomSchema_test_6);
+const Chatroom = mongoose.model("Chatroom", chatroomSchema);
 
 const postOne = async (roomName: string) => {
   try {
