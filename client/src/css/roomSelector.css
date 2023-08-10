@@ -1,0 +1,65 @@
+.RoomSelector {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 30%;
+  font-weight: 600;
+  font-size: 16px;
+  word-wrap: break-word;
+}
+
+.SelectorInputAndButton {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  gap: 10px;
+}
+
+.JoinButton {
+  background-color: var(--light-grey-color);
+  border-radius: 2px;
+  padding: 10px 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13.3px;
+}
+
+.SelectorInput {
+  padding: 10px 10px;
+  background-color: var(--dark-grey-color);
+  text-shadow: 0 0 0 #000;
+  border: none;
+  outline: none;
+}
+
+.SelectorInput::placeholder {
+  font-weight: 300;
+  font-size: 13.3px;
+  color: #000000;
+}
+
+input[type="text"] {
+  width: 100%;
+  border: none;
+  outline: none;
+}
+
+.PlusButton button {
+  background: none;
+  background-color: var(--medium-grey-color);
+  padding: 5px 9px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  text-align: center;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-weight: 700;
+  font-size: 13px;
+}
