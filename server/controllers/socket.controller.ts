@@ -56,7 +56,7 @@ const socketInit = function (
         usernames: chatroom.usernames,
       });
 
-      if (chatroom.users === 0) {
+      if (chatroom.users <= 0) {
         await dbModels.removeOne(chatroom._id.toString());
         io.emit("update_chatrooms", await dbModels.getAll());
       }
