@@ -74,7 +74,7 @@ const socketInit = function (
         );
         await chatroom.save();
 
-        io.to(chatroom.name!).emit("user_geht", {
+        io.to(chatroom.name!).emit("user_get", {
           room: chatroom.name,
           username: socket.id,
           userCount: chatroom.users,

@@ -12,7 +12,7 @@ export interface ServerToClientEvents {
   create_room: (roomName: string) => void;
   leave_room: (roomName: string) => void;
   disconnect: () => void;
-  user_geht: (room: Room) => void;
+  user_get: (room: Room) => void;
   user_join: (room: Room) => void;
   user_leaves: (room: Room) => void;
 }
