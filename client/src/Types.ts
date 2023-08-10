@@ -5,7 +5,7 @@ export interface ClientToServerEvents {
   join_room: (roomData: RoomData) => void;
   leave_room: (roomName: string) => void;
   disconnect: () => void;
-  user_geht: (room: Room) => void;
+  user_get: (room: Room) => void;
 }
 export interface ServerToClientEvents {
   user_leaves: (room: Room) => void;
