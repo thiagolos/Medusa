@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --forceExit"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --forceExit",
+    "dev": "nodemon server.ts"
   },
   "author": "",
   "license": "ISC",
