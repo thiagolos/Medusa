@@ -33,7 +33,7 @@ To begin using Real Time Trivia, follow these steps:
   cd medusa/server
   npm install
   ```
-4. Create a MongoDB database for the application and update the connection configuration in the backend's `.env` file.
+4. Create a MongoDB database for the application and update the DB_NAME variable in the backend's `.env` file.
 5. Start the backend server using `npm run dev` in the backend directory.
   ```
   cd medusa/server
@@ -48,6 +48,6 @@ To begin using Real Time Trivia, follow these steps:
 ### Forked from:
 Magdalena Keller - [LinkedIn](https://www.linkedin.com/in/magdalena-keller/) - [Github](https://github.com/makekema/Medusa)
 
-### Contributers 
+### Contributers
 - Alex Eze [LinkedIn](https://www.linkedin.com/in/alex-eze-dev/) - [GitHub](https://github.com/msunay)
 - Thiago Los [LinkedIn](https://www.linkedin.com/in/thiagolos/) - [GitHub](https://github.com/thiagolos)
