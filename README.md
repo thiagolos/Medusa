@@ -1,53 +1,41 @@
-# Medusa
-## Introduction
-What you'll find is the backend and frontend code for a chat app. The app aims to allow for easy and instant discussions between users on various topics of mutual interest. It provides chatrooms covering a wide range of interests from videogames to politics. Users enter anonymously without signups, allowing them to spontaneously join conversations. Chatrooms continuously run 24/7, allowing discussions between an ever-changing group of participants. The app hopes to connect likeminded people and provide a space for spontaneous discussions on any subjects that matter to users, welcoming different voices and perspectives.
+# Anonymous Multi-Chatroom App
 
-## Functionality
-The main functionalities you'll find are the following:
+Welcome to the Anonymous Multi-Chatroom App, a platform that enables users to engage in real-time discussions within multiple chatrooms. This README provides an overview of the project, its features and the technologies employed.
 
-- create a new chatroom --> the chatroom you created is added to the chatroom overview on top of the page, a little chat-window will pop up and you can chat with other people in the same chat
-- enter an existing chatroom --> click on one of the chatroom names appearing on top of the page and a little chat-window will pop up
-- leave chatrooms --> click on the x-button on top right of the chat-window --> the chat is deleted. If you were the only one in the chat, it will get deleted from the chatlist. also, if you should be the only one in a chatroom and close your page, the chatroom will be deleted
+### Frontend
 
-What is nice to know on code side:
-- there are two storages of room and user data, one in the backend and one in the frontend
-    - backend: the db holds every room, its users by name and by number
-    - frontend: there is a storage object, that holds the user and all the rooms they're in
-- there is one storage of all messages one user has sent and received in the frontend
+- **React:** A widely-used JavaScript library for building user interfaces.
+- **TypeScript:** A statically typed superset of JavaScript that enhances code quality and readability.
+- **Socket.io:** A library facilitating real-time, bidirectional communication between clients and the server.
+
+### Backend
+
+- **MongoDB:** A popular NoSQL database for efficient storage and retrieval of data.
+- **Mongoose:** An ORM (Object-relational mapping) library for MongoDB, simplifying database interactions.
+- **TypeScript:** Employed on the backend to enhance development with static typing.
+- **Express:** A fast and minimalist web application framework for Node.js.
+
+### Testing
+
+- **Cypress:** A comprehensive end-to-end testing framework for ensuring application behavior.
+- **Jest:** A JavaScript testing framework used for unit testing.
+
+## Features
+
+- **Multi-Chatroom Support:** Users can join different chatrooms based on their interests.
+  <img width="1680" alt="Screenshot 2023-08-26 at 14 33 50" src="https://github.com/thiagolos/Medusa/assets/128632331/a6529b85-24ff-4b2c-95ae-ed8e6b27ed31">
+- **Real-time Messaging:** Engage in real-time conversations within chatrooms.
+  <img width="1680" alt="Screenshot 2023-08-26 at 14 33 33" src="https://github.com/thiagolos/Medusa/assets/128632331/66ca9da6-adb4-49e8-b779-058fe250882a">
+- **Anonymity:** Users can participate in discussions anonymously, providing privacy.
+- **User-Friendly Interface:** A clean and intuitive interface for seamless user experience.
 
 ## Getting Started
 
-To begin using Real Time Trivia, follow these steps:
+To start using the app, follow these steps:
 
 1. Clone this repository.
-  ```
-  git clone https://github.com/msunay/medusa.git
-  ```
-2. Set up the frontend by navigating to the frontend directory and running `npm install`.
-  ```
-  cd medusa/client
-  npm install
-  ```
-3. Similarly, set up the backend by going to the backend directory and running `npm install`.
-  ```
-  cd medusa/server
-  npm install
-  ```
-4. Create a MongoDB database for the application and update the DB_NAME variable in the backend's `.env` file.
-5. Start the backend server using `npm run dev` in the backend directory.
-  ```
-  cd medusa/server
-  npm run dev
-  ```
-6. Start the frontend development server using `npm run dev` in the frontend directory.
-  ```
-  cd medusa/client
-  npm run dev
-  ```
-
-### Forked from:
-Magdalena Keller - [LinkedIn](https://www.linkedin.com/in/magdalena-keller/) - [Github](https://github.com/makekema/Medusa)
-
-### Contributers
-- Alex Eze [LinkedIn](https://www.linkedin.com/in/alex-eze-dev/) - [GitHub](https://github.com/msunay)
-- Thiago Los [LinkedIn](https://www.linkedin.com/in/thiagolos/) - [GitHub](https://github.com/thiagolos)
+2. Set up the frontend by navigating to the `/frontend` directory and running `npm install`.
+3. Similarly, set up the backend by going to the `/backend` directory and running `npm install`.
+4. Set up your MongoDB database and update the connection configuration in the backend's `.env` file.
+5. Start the backend server using `nodemon server.ts` in the `/backend` directory.
+6. Start the frontend development server using `npm run dev` in the `/frontend` directory.
