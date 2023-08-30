@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import Client from "socket.io-client";
 import app, { server } from '../index'
 
-
 const Chatroom = dbModels.Chatroom;
 const databaseName = "test";
 

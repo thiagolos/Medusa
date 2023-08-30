@@ -1,6 +1,7 @@
 import mongoose from "./index";
 // WHEN RUNNING TESTS: Comment out the line above, and uncomment the line below.
 // import mongoose from 'mongoose';
+
 import type { Chatroom } from "../Types";
 
 const chatroomSchema = new mongoose.Schema({
